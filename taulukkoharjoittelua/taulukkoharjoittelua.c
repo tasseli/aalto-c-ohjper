@@ -19,7 +19,7 @@ int array_sum(int *array, int count) {
 }
 
 int array_reader(int *vals, int n) {
-    char line[];
+    char line[0];
     scanf("%s", &line);
     printf(line);
     //for (int i = 0; i < n; ++i) {
@@ -30,5 +30,6 @@ int array_reader(int *vals, int n) {
 
 int main(void) {
     int vals[] = {0};
-    printf((char)array_reader(vals, 1));
+	vals[0] = array_reader(vals, 1);
+    //printf();
 }
