@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 
+const int ALUSTETTU = 1; // stringintsekkauslogiikkani takia on tärkeää, ettei tyhjä taulukko ole täynnä nollia.
+
 // Mikael Nenonen k90390
 // 2017-06-27
 
@@ -38,12 +40,22 @@ int check_if_word_needed(char *dest, const char *src) {
 		if (spaces_in_loop%3 == 0 && spaces_in_loop > 0) { // niinku coming
 			printf("c() Dest nyt: %s\n", dest);
 			strcpy(dest, " niinku ");
+			dest[8] = ALUSTETTU;
 			printf("c() Dest nyt: %s\n", dest);
 			added += 8;
 		}
 		if (spaces_in_loop%4 == 0 && spaces_in_loop > 0) { // totanoin coming
-			strcpy(dest, " totanoin ");
-			added += 10;
+			printf("c() Dest nyt: %s\n", dest);
+			if (added == 8) {
+				strcpy(dest+added-1, " totanoin ");
+				dest[10+added-1] = ALUSTETTU;
+				added += 17;
+			} else {
+				strcpy(dest, " totanoin ");
+				dest[10] = ALUSTETTU;
+				added += 10;
+			}
+			printf("c() Dest nyt: %s\n", dest);
 		}		
 	}
 	return added;
@@ -63,7 +75,8 @@ void korsoraattori(char *dest, const char *src) {
 		int added = check_if_word_needed(dest+i, src);
 		i += added;
 		printf("k() Dest nyt: %s\n", dest);
-		*(dest+i) = *src;
+		if (!added)
+			*(dest+i) = *src;
 		src++;
 	}
 	printf(dest);
@@ -71,7 +84,7 @@ void korsoraattori(char *dest, const char *src) {
 
 void init_array(char *dest, int size) {
 	for (int i=0; i<size; i++) {
-		dest[i] = 1;
+		dest[i] = ALUSTETTU;
 	}
 }
 
@@ -85,5 +98,9 @@ int main() {
 	check_if_word_needed((char*)"", (char*)"");
 	char src2[] = "Nuorna vitsa väännettävä, ja mustan kissan paksut posket.";
 	korsoraattori(dest, src2);
+	init_array(dest, 180);
+	check_if_word_needed((char*)"", (char*)"");
+	char src3[] = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam non aliquam miumau haloo hehe heh moi";
+	korsoraattori(dest, src3);
 	return 0;
 }
