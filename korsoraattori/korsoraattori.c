@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <string.h>
 
-const int ALUSTETTU = 1; // stringintsekkauslogiikkani takia on tärkeää, ettei tyhjä taulukko ole täynnä nollia.
-
 // Mikael Nenonen k90390
 // 2017-06-27
 
@@ -37,17 +35,14 @@ int check_if_word_needed(char *dest, const char *src) {
 		spaces_in_loop++;
 		if (spaces_in_loop%3 == 0 && spaces_in_loop > 0) { // niinku coming
 			strcpy(dest, " niinku ");
-			dest[8] = ALUSTETTU;
 			added += 8;
 		}
 		if (spaces_in_loop%4 == 0 && spaces_in_loop > 0) { // totanoin coming
 			if (added == 8) {
 				strcpy(dest+added-1, " totanoin ");
-				dest[10+added-1] = ALUSTETTU;
-				added += 17;
+				added += 9;
 			} else {
 				strcpy(dest, " totanoin ");
-				dest[10] = ALUSTETTU;
 				added += 10;
 			}
 		}		
@@ -66,33 +61,22 @@ void korsoraattori(char *dest, const char *src) {
 			continue;
 		}
 		int added = check_if_word_needed(dest+i, src);
-		i += added;
 		if (!added)
 			*(dest+i) = *src;
+		else
+			i += added-1;
 		src++;
 	}
-	printf(dest);
-}
-
-void init_array(char *dest, int size) {
-	for (int i=0; i<size; i++) {
-		dest[i] = ALUSTETTU;
-	}
+	printf("%s", dest);
 }
 
 int main() {
-	char dest[180];
-	init_array(dest, 180);
-	char src[] = "Nuorna vitsa väännettävä, ja";
+	char dest[180] = {0};
+	char src[] = "yksi auto valui itsekseen ilman kuljettajaa makea alas";
 	korsoraattori(dest, src);
 	printf("\n");
-	init_array(dest, 180);
-	check_if_word_needed((char*)"", (char*)"");
-	char src2[] = "Nuorna vitsa väännettävä, ja mustan kissan paksut posket.";
-	korsoraattori(dest, src2);
-	init_array(dest, 180);
-	check_if_word_needed((char*)"", (char*)"");
-	char src3[] = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam non aliquam miumau haloo hehe heh moi";
-	korsoraattori(dest, src3);
+	char dest2[180] = {0};
+	char src2[] = "1 2 3 4 5 6 7 8 9 10 11 12 13 14";
+	korsoraattori(dest2, src2);
 	return 0;
 }
