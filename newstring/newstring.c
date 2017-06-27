@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stddef.h>
 
 // Mikael Nenonen k90390
 // 2017-06-27
@@ -34,7 +35,14 @@ int es_copy(char *dst, const char *src) {
 }
 
 char *es_token(char *s, char c) {
-	return 0;
+	while(*s != '#') {
+		if (*s == c) {
+			*s = '#';
+			return s+1;
+		}
+		s++;
+	}
+	return NULL;
 }
 
 int main() {
