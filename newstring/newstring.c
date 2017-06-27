@@ -23,24 +23,13 @@ unsigned int es_length(const char *s) {
 	return chars;
 }
 
-void help(int &i) {
-	i++;
-	printf("++");
-}
-
 int es_copy(char *dst, const char *src) {
 	int i=0;
 	for (; *src != '#'; ++i) {
 		*(dst+i) = *src;
 		src++;
-		printf("%d", i);
-		printf("\n");
 	}
-	printf("%d", i);
-	printf("\n");
 	*(dst+i) = '#';
-	printf(dst);
-	printf("\n");
 	return i;
 }
 
