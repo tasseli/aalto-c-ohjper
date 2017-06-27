@@ -45,13 +45,14 @@ int check_if_word_needed(char *dest, const char *src) {
 				strcpy(dest, " totanoin ");
 				added += 10;
 			}
-		}		
+		}
 	}
 	return added;
 }
 
 void korsoraattori(char *dest, const char *src) {
-	for(int i=0; *src; i++) {
+	int i=0;
+	for(; *src; i++) {
 		if (check_for_ks((dest+i), src)) {
 			src += 2;
 			continue;
@@ -67,15 +68,23 @@ void korsoraattori(char *dest, const char *src) {
 			i += added-1;
 		src++;
 	}
-	printf("%s", dest);
+	dest[i] = 0;
+	char print[i];
+	int j=0;
+	while (j<i && dest[j] != '#') {
+		print[j] = dest[j];
+		j++;
+	}
+	printf("%s", print);
+	check_if_word_needed((char *)"", (char *)"");
 }
 
 int main() {
-	char dest[180] = {0};
+	char dest[180];
 	char src[] = "yksi auto valui itsekseen ilman kuljettajaa makea alas";
 	korsoraattori(dest, src);
 	printf("\n");
-	char dest2[180] = {0};
+	char dest2[180];
 	char src2[] = "1 2 3 4 5 6 7 8 9 10 11 12 13 14";
 	korsoraattori(dest2, src2);
 	return 0;
