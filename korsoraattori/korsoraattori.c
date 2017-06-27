@@ -29,23 +29,18 @@ int check_for_ts(char *dest, const char *src) {
 int check_if_word_needed(char *dest, const char *src) {
 	static int spaces_in_loop = 0;
 	if (*src == 0) {			// My magic to reset the static counter
-		printf("spaces: %d", spaces_in_loop);
 		spaces_in_loop = 0;
-		printf("spaces: %d", spaces_in_loop);
 		return 0;
 	}
 	int added = 0;
 	if (*src == ' ') {
 		spaces_in_loop++;
 		if (spaces_in_loop%3 == 0 && spaces_in_loop > 0) { // niinku coming
-			printf("c() Dest nyt: %s\n", dest);
 			strcpy(dest, " niinku ");
 			dest[8] = ALUSTETTU;
-			printf("c() Dest nyt: %s\n", dest);
 			added += 8;
 		}
 		if (spaces_in_loop%4 == 0 && spaces_in_loop > 0) { // totanoin coming
-			printf("c() Dest nyt: %s\n", dest);
 			if (added == 8) {
 				strcpy(dest+added-1, " totanoin ");
 				dest[10+added-1] = ALUSTETTU;
@@ -55,14 +50,13 @@ int check_if_word_needed(char *dest, const char *src) {
 				dest[10] = ALUSTETTU;
 				added += 10;
 			}
-			printf("c() Dest nyt: %s\n", dest);
 		}		
 	}
 	return added;
 }
 
 void korsoraattori(char *dest, const char *src) {
-	for(int i=0; *(dest+i) && *src; i++) {
+	for(int i=0; *src; i++) {
 		if (check_for_ks((dest+i), src)) {
 			src += 2;
 			continue;
@@ -71,10 +65,8 @@ void korsoraattori(char *dest, const char *src) {
 			src += 2;
 			continue;
 		}
-		printf("k() Dest nyt: %s\n", dest);
 		int added = check_if_word_needed(dest+i, src);
 		i += added;
-		printf("k() Dest nyt: %s\n", dest);
 		if (!added)
 			*(dest+i) = *src;
 		src++;
