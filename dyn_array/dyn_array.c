@@ -19,7 +19,9 @@ int *dynamic_reader(unsigned int n) {
 }
 
 int *insert_into_array(int *arr, unsigned int num, int newval) {
-  return 0;
+  int *p = (int *) realloc(arr, (num+1)*sizeof(int));
+  p[num] = newval;
+  return p;
 }
 
 int main(void) {
