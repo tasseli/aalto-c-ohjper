@@ -12,18 +12,24 @@ char *delete_comments(char *input) {
         IN_COMMENT_BLOCK
     } mystate;
     mystate = NOT_IN_COMMENT;
-    char *beginning = input;
-    while(*input) {
+    char *len_counter = input;
+    int input_length = 0;
+    while(*len_counter) {
+        len_counter++, input_length++;
+    }
+    char *input_copy = input;
+    while(*input_copy) {
         if (*input == '/') {
             if(mystate == NOT_IN_COMMENT) {
                 if (*(input+1) == '/') {
                     // line comment starts
                     input += 2;
                     char *copy = input;
-                    int counter = 0;
+                    int comment_length = 0;
                     while(*copy != '\n') {
-                        copy++, counter++;
+                        copy++, comment_length++;
                     }
+                    
                 }
                 if (*(input+1) == '*') {
                     // block comment starts
