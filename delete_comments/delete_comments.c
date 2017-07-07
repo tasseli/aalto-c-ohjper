@@ -28,14 +28,21 @@ char *delete_comments(char *input) {
                 }
                 // move the rest of the input to replace the comment. Memmove?
                 input_copy = (char *) memmove(input_copy, rest, rest_length+1);
+                continue;
             }
             if (*(input_copy+1) == '*') {
                 // block comment starts
-                char *copy = input;
-                int comment_length = 0;
-                while(*copy != '*' && *(copy+1) != '/') {
-                    copy++, comment_length++;
+                char *copy = input_copy;
+                while(!(*copy == '*' && *(copy+1) == '/')) {
+                    copy++;
                 }
+                char *rest = copy+2;
+                int rest_length = 0;
+                while(*copy) {
+                    rest_length++, copy++;
+                }
+                // move the rest of the input to replace the comment. Memmove?
+                input_copy = (char *) memmove(input_copy, rest, rest_length+1);
                 // add one or two to compensate for the longer comment, and move as before.
             }
         }
@@ -72,7 +79,7 @@ char *read_file(const char *filename)
 
 int main(void)
 {
-    char *code = read_file("testifile2.c");
+    char *code = read_file("testifile.c");
     if (!code) {
         printf("No code read");
         return -1;
@@ -85,4 +92,5 @@ int main(void)
     fputs(code, stdout);
     
     free(code);
+    return 0;
 }
