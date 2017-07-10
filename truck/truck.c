@@ -10,11 +10,11 @@ typedef struct truck TR;
 
 void copy_name(char* pointer, const char* string) {
   int i = 0;
-  while(string[i]) {
+  while(string[i] && i<30) {
     pointer[i] = string[i];
     i++;
   }
-  pointer[i] = string[i];
+  pointer[i] = 0;
 }
 
 TR create_truck(const char *name, double length, double weight, struct cargo crg) {
@@ -31,14 +31,15 @@ void print_truck(const TR *car) {
   char nimi[31];
   strcpy(nimi, car->name);
   printf("%s\n", nimi);
-  printf("%.1Lf\n", car->length);
-  printf("%.1Lf\n", car->weight);
+  printf("%.1f\n", car->length);
+  printf("%.1f\n", car->weight);
   strcpy(nimi, car->crg.title);
   printf("%s\n", nimi);
   printf("%d\n", car->crg.quantity);
-  printf("%.1Lf\n", car->crg.weight);
+  printf("%.1f\n", car->crg.weight);
 }
 
+/*
 int main(void) {
   char* name = (char *) malloc(31);
   copy_name(name, "Muumibiili");
@@ -54,3 +55,4 @@ int main(void) {
   print_truck(&eka);
   return 0;
 }
+*/
