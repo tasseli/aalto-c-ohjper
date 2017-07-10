@@ -8,7 +8,6 @@ struct cargo {
 
 // Define the truck structure here
 struct truck{
-  // Have truck data
   char name[31];
   double length;
   double weight;

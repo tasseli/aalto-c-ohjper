@@ -8,7 +8,6 @@
 typedef struct truck TR;
 
 TR create_truck(const char *name, double length, double weight, struct cargo crg) {
-  // Create a new truck in &trp
   TR creation;
   creation.length = length;
   creation.weight = weight;
@@ -22,6 +21,7 @@ TR create_truck(const char *name, double length, double weight, struct cargo crg
 
 void print_truck(const TR *car) {
   // Print truck data
+  
 }
 
 int main(void) {
@@ -42,11 +42,11 @@ int main(void) {
     i++;
   }
   title[i] = copied2[i];
-  struct cargo ekakargo;
-  ekakargo.title = title;
-  ekakargo.quantity = 3;
-  ekakargo.weight = 4;
+  struct cargo first_cargo;
+  first_cargo.title = title;
+  first_cargo.quantity = 3;
+  first_cargo.weight = 4;
   
-  create_truck(name, 1, 2, ekakargo);
+  create_truck(name, 1, 2, first_cargo);
   return 0;
 }
