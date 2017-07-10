@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "source.h"
 
 // Mikael Nenonen k90390
@@ -27,7 +28,9 @@ TR create_truck(const char *name, double length, double weight, struct cargo crg
 
 void print_truck(const TR *car) {
   // Print truck data
-  
+  char nimi[31];
+  strcpy(nimi, car->name);
+  printf("%s\n", nimi);
 }
 
 int main(void) {
@@ -41,6 +44,7 @@ int main(void) {
   first_cargo.quantity = 3;
   first_cargo.weight = 4;
   
-  create_truck(name, 1, 2, first_cargo);
+  TR eka = create_truck(name, 1, 2, first_cargo);
+  print_truck(&eka);
   return 0;
 }
