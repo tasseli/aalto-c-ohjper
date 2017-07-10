@@ -13,7 +13,7 @@ struct truck{
   double length;
   double weight;
   struct cargo crg;
-}
+};
 
 struct truck create_truck(const char *name, double length, double weight,
 			    struct cargo crg);
