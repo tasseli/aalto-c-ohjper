@@ -31,6 +31,12 @@ void print_truck(const TR *car) {
   char nimi[31];
   strcpy(nimi, car->name);
   printf("%s\n", nimi);
+  printf("%.1Lf\n", car->length);
+  printf("%.1Lf\n", car->weight);
+  strcpy(nimi, car->crg.title);
+  printf("%s\n", nimi);
+  printf("%d\n", car->crg.quantity);
+  printf("%.1Lf\n", car->crg.weight);
 }
 
 int main(void) {
