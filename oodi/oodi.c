@@ -8,6 +8,7 @@
 
 int init_record(struct oodi *or, const char *p_student, const char *p_course,
         unsigned char p_grade, struct date p_compdate) {
+  // Check if the student number has an end sign, and abort if needed
   int i;
   int ended=0;
   for(i=0; i<7; i++) {
@@ -19,6 +20,7 @@ int init_record(struct oodi *or, const char *p_student, const char *p_course,
   if(!ended)
     return 0;
   
+  // Copy the course name
   strcpy(or->student, p_student);
   int course_array_length = 1;  // There's the end sign
   const char* p_course_copy = p_course;
@@ -29,6 +31,7 @@ int init_record(struct oodi *or, const char *p_student, const char *p_course,
   or->course = (char *) malloc(course_array_length);
   if(!or->course)
     return 0;
+  // and the rest of the fields
   strcpy(or->course, p_course);
   or->grade = p_grade;
   or->compdate = p_compdate;
