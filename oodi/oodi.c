@@ -38,8 +38,28 @@ int init_record(struct oodi *or, const char *p_student, const char *p_course,
   return 1;
 }
 
+void print_oodi(struct oodi printed) {
+  if(&printed == 0) {
+    printf("The oodi given was NULL!\n");
+  } else {
+    printf("Student: %s\n", printed.student);
+  }
+}
+
 struct oodi *add_record(struct oodi *array, unsigned int size, struct oodi newrec) {
-  return 0;
+/*  struct oodi* new_array;
+  if(array == 0) {
+    new_array = malloc(sizeof(struct oodi));
+  } else {
+    new_array = realloc((void*)array, sizeof(struct oodi)*size+1)
+  }
+  array[size] = newrec;
+  */
+  int i;
+  for(i=0; i<size; i++) {
+    print_oodi(array[i]);
+  }
+  return array;
 }
 
 int change_grade(struct oodi *array, unsigned int size, const char *p_student,
