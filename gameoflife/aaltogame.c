@@ -31,8 +31,29 @@ void releaseArea(Area *a) {
 	free(a);
 }
 
+struct coords {
+	unsigned int x;
+	unsigned int y;
+}; 
+
+struct coords rand_coords(unsigned int xsize, unsigned int ysize) {
+	struct coords newcoords;
+	newcoords.x = rand() % xsize;
+	newcoords.y = rand() % ysize;
+	return newcoords;
+}
+
 void initArea(Area *a, unsigned int n) {
-	;
+	for(;n>0;n--) {
+		while(1) {
+			struct coords trying;
+			trying = rand_coords(a->xsize, a->ysize);
+			if(a->cells[trying.y][trying.x] == DEAD) {
+				a->cells[trying.y][trying.x] = ALIVE;
+				break;
+			}
+		}
+	}
 }
 
 void printArea(const Area *a) {
