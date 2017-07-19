@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "aaltogame.h"
 
 // Mikael Nenonen k90390
@@ -9,11 +10,14 @@ Area *createArea(unsigned int xsize, unsigned int ysize) {
 	area->xsize = xsize;
 	area->ysize = ysize;
 	int j,i;
-	area->cells = Status* rows[ysize];
+	Status** rows = malloc(ysize*sizeof(Status*));
+	area->cells = rows;
 	for(j=0; j<ysize; j++) {
-		area->cells[j] = Status columns[xsize];
+		Status* columns = malloc(xsize*sizeof(Status));
+		area->cells[j] = columns;
 		for(i=0; i<xsize; i++) {
 			area->cells[j][i] = DEAD;
 		}
 	}
+	return area;
 }
