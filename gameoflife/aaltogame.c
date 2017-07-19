@@ -21,3 +21,19 @@ Area *createArea(unsigned int xsize, unsigned int ysize) {
 	}
 	return area;
 }
+
+void releaseArea(Area *a) {
+	;
+}
+
+void initArea(Area *a, unsigned int n) {
+	;
+}
+
+void printArea(const Area *a) {
+	;
+}
+
+void tick(Area *a) {
+	;
+}
