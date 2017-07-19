@@ -61,6 +61,9 @@ void printValue(AnyData val)
 	case STRING:
 		printString(val.value.sval);
 		break;
+	case UNDEF:
+		printf("No data type set.\n");
+		break;
 	}
 }
 
