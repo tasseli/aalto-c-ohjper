@@ -23,7 +23,12 @@ Area *createArea(unsigned int xsize, unsigned int ysize) {
 }
 
 void releaseArea(Area *a) {
-	;
+	int j;
+	for(j=0; j<a->ysize; j++) {
+		free(a->cells[j]);
+	}
+	free(a->cells);
+	free(a);
 }
 
 void initArea(Area *a, unsigned int n) {
