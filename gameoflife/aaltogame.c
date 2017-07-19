@@ -57,7 +57,16 @@ void initArea(Area *a, unsigned int n) {
 }
 
 void printArea(const Area *a) {
-	;
+	int j, i;
+	for(j=0; j<a->ysize; j++) {
+		for(i=0; i<a->xsize; i++) {
+			if(a->cells[j][i] == ALIVE)
+				printf("*");
+			if(a->cells[j][i] == DEAD)
+				printf(".");
+		}
+		printf("\n");
+	}
 }
 
 void tick(Area *a) {
