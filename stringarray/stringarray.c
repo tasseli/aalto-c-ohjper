@@ -60,7 +60,9 @@ char **insert_string(char **arr, const char *str)
 void switch_strs(char **arr, int j, int i) {
     char *temp = (char *)malloc((strlen(arr[j]) + 1) * sizeof(char));
     strcpy(temp, arr[j]);
+    arr[j] = realloc(arr[j], (strlen(arr[i])+1) * sizeof(char));
     strcpy(arr[j], arr[i]);
+    arr[i] = realloc(arr[i], (strlen(temp)+1) * sizeof(char));
     strcpy(arr[i], temp);
     free(temp);
 }
