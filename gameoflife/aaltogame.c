@@ -126,10 +126,21 @@ Status gameLogic(int neighborsAlive, Status current) {
 }
 
 void tick(Area *a) {
-	Area b;
-	int j;
+	Area *b = malloc(sizeof(a));
+    b->ysize = a->ysize;
+    b->xsize = a->xsize;
+    int i,j;
+    Status** rows = malloc(a->ysize*sizeof(a->Status*));
+    b->cells = rows;
+    for(j=0; j<a->ysize; j++) {
+        Status* columns = malloc(a->xsize*sizeof(Status));
+        b->cells[j] = columns;
+        for(i=0; i<a->xsize; i++) {
+            b->cells[j][i] = a->cells[j][i];
+        }
+    }
+
 	for(j=0; j<a->ysize; j++) {
-		int i;
 		for(i=0; i<a->xsize; i++) {
 			int neighborsAlive=0;
 			struct neighborCoords here;
