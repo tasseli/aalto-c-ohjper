@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "stringarray.h"
 
 // Mikael Nenonen k90390
@@ -12,6 +13,7 @@
 char **init_string_array(void)
 {
     char **empty = malloc(sizeof(char*));
+    return empty;
 }
 
 /* Releases the memory used by the strings.
@@ -25,6 +27,7 @@ void release_string_array(char **arr)
  */
 char **insert_string(char **arr, const char *str)
 {
+    return arr;
 }
 
 
