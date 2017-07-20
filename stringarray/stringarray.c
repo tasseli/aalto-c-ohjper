@@ -22,7 +22,11 @@ char **init_string_array(void)
  */
 void release_string_array(char **arr)
 {
-    free(*arr);
+    char** cpy = arr;
+    while(*cpy) {
+        free(*cpy);
+        cpy++;
+    }
     free(arr);
 }
 
@@ -32,12 +36,12 @@ void release_string_array(char **arr)
 char **insert_string(char **arr, const char *str)
 {
     char** cpy = arr;
-    int pointer_count=0;
+    int arr_size=1;
     while(*cpy) {
-        pointer_count++;
+        arr_size++;
         cpy++;
     }
-    arr = realloc(arr, (pointer_count+2)*sizeof(char*));
+    arr = realloc(arr, (arr_size+1)*sizeof(char*));
 
     const char* stringcpy = str;
     int stringlength = 0;
@@ -45,10 +49,11 @@ char **insert_string(char **arr, const char *str)
         stringlength++;
         stringcpy++;
     }
-    arr[pointer_count] = malloc((stringlength+1)*sizeof(char));
+    arr[arr_size-1] = malloc((stringlength+1)*sizeof(char));
     
-    strcpy(arr[pointer_count], str);
-    arr[pointer_count+1] = 0;
+    strcpy(arr[arr_size-1], str);
+    arr[arr_size] = 0;
+    print_string_array(arr);
     return arr;
 }
 
