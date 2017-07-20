@@ -74,15 +74,10 @@ void sort_string_array(char **arr)
         arr_size++;
         cpy++;
     }
-    printf("arr_size: %d\n", arr_size);
     int ordered_to, j;
     for(ordered_to=0; ordered_to<arr_size; ordered_to++) {
-        printf("ordered to: %d\n", ordered_to);
         for(j=ordered_to-1; j>=0; j--) {
-            printf("j: %d, j+1: %d\n", j, j+1);
-            printf("arr[j]: %s, arr[j+1]: %s, strcmp(arr[j], arr[j+1]): %d\n", arr[j], arr[j+1], strcmp(arr[j], arr[j+1]));
             if(strcmp(arr[j], arr[j+1]) > 0) {
-                printf("Vaihdan\n");
                 switch_strs(arr, j, j+1);
             }
         }
