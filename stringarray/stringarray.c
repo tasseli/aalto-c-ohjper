@@ -57,10 +57,36 @@ char **insert_string(char **arr, const char *str)
     return arr;
 }
 
+void switch_strs(char **arr, int j, int i) {
+    char *temp = (char *)malloc((strlen(arr[j]) + 1) * sizeof(char));
+    strcpy(temp, arr[j]);
+    strcpy(arr[j], arr[i]);
+    strcpy(arr[i], temp);
+    free(temp);
+}
 
 /* Exercise c: reorder strings in <array> to lexicographical order */
 void sort_string_array(char **arr)
 {
+    int arr_size=0;
+    char** cpy=arr;
+    while(*cpy) {
+        arr_size++;
+        cpy++;
+    }
+    printf("arr_size: %d\n", arr_size);
+    int ordered_to, j;
+    for(ordered_to=0; ordered_to<arr_size; ordered_to++) {
+        printf("ordered to: %d\n", ordered_to);
+        for(j=ordered_to-1; j>=0; j--) {
+            printf("j: %d, j+1: %d\n", j, j+1);
+            printf("arr[j]: %s, arr[j+1]: %s, strcmp(arr[j], arr[j+1]): %d\n", arr[j], arr[j+1], strcmp(arr[j], arr[j+1]));
+            if(strcmp(arr[j], arr[j+1]) > 0) {
+                printf("Vaihdan\n");
+                switch_strs(arr, j, j+1);
+            }
+        }
+    }
 }
 
 /* You can use this function to check what your array looks like.
