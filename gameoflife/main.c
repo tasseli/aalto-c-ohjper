@@ -30,7 +30,7 @@ int main(void)
     initArea(a, 150);
 
     // how many iterations we want
-    int rounds = 2;
+    int rounds = 10;
 
     // loop iterations, cancel with ctrl-c
     for(int i=0; i<rounds; i++) {

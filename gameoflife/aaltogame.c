@@ -119,7 +119,7 @@ struct neighborCoords legalNeighbors(int x, int y, unsigned int xsize, unsigned 
 		legal.surrounding[6] = newCoords(x+1, y-1);
 	if(y>0 && x>0)
 		legal.surrounding[7] = newCoords(x-1, y-1);
-  print_neighborcoords(legal);
+//  print_neighborcoords(legal);
 	return legal;
 }
 
@@ -148,11 +148,11 @@ void tick(Area *a) {
 				if(here.surrounding[k].x == -1 || here.surrounding[k].y == -1) {
 					continue;
         }
-				if(a->cells[here.surrounding[k].x][here.surrounding[k].y] == ALIVE) {
+				if(a->cells[here.surrounding[k].y][here.surrounding[k].x] == ALIVE) {
 					neighborsAlive++;
         }
 			}
-			b->cells[l][m] = gameLogic(neighborsAlive, a->cells[l][m]);
+			b->cells[m][l] = gameLogic(neighborsAlive, a->cells[m][l]);
 		}
 	}
 
