@@ -27,18 +27,18 @@ int main(void)
     srand((unsigned)time(NULL));
 
     Area *a = createArea(50,20);
-//    initArea(a, 150);
+    initArea(a, 150);
 
     // how many iterations we want
-    int rounds = 80;
+    int rounds = 2;
 
     // loop iterations, cancel with ctrl-c
     for(int i=0; i<rounds; i++) {
         printf("\nGeneration: %d\n", i+1);
-//        printArea(a);
+        printArea(a);
         // slow down iterations
-        usleep(500000);
-//        tick(a);
+//        usleep(500000);
+        tick(a);
     }
-//    releaseArea(a);
+    releaseArea(a);
 }
