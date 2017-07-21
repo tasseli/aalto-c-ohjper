@@ -10,7 +10,7 @@ Area * create_area_pointer(unsigned int width, unsigned int height) {
   Area *newarea = malloc(sizeof(Area));
   newarea->xsize = width;
   newarea->ysize = height;
-  int i,j;
+  int j;
   Status** rows = malloc(newarea->ysize*sizeof(Status*));
   newarea->cells = rows;
   for(j=0; j < newarea->ysize; j++) {
@@ -45,12 +45,7 @@ struct coords {
 	int y;
 }; 
 
-struct coords newCoords(int x, int y) {
-	struct coords returnable;
-	returnable.x = x;
-	returnable.y = y;
-	return returnable;
-}
+struct coords newCoords(int, int);
 
 struct coords rand_coords(unsigned int xsize, unsigned int ysize) {
 	struct coords newcoords;
@@ -96,12 +91,17 @@ void print_neighborcoords(struct neighborCoords printed) {
   }
 }
 
+struct coords newCoords(int x, int y) {
+	struct coords returnable;
+	returnable.x = x;
+	returnable.y = y;
+	return returnable;
+}
 struct neighborCoords legalNeighbors(int x, int y, unsigned int xsize, unsigned int ysize) {
 	struct neighborCoords legal;
 	int i;
 	for(i=0;i<8;i++) {
-		legal.surrounding[i].x = -1;
-		legal.surrounding[i].y = -1;
+		legal.surrounding[i].x = legal.surrounding[i].y = -1;
 	}
 	if(x>0)
 		legal.surrounding[0] = newCoords(x-1, y);
@@ -144,7 +144,7 @@ void tick(Area *a) {
 			struct neighborCoords here;
 			here = legalNeighbors(l, m, a->xsize, a->ysize);
 			int k;
-			for(k=0;k < 8;k++) {
+			for(k=0; k < 8; k++) {
 				if(here.surrounding[k].x == -1 || here.surrounding[k].y == -1) {
 					continue;
         }
