@@ -4,3 +4,6 @@
 #include <stdio.h>
 #include "bits.h"
 
+void bit_set(unsigned char* data, int idx) {
+  
+}
