@@ -53,19 +53,19 @@ int bit_get(const unsigned char* data, int idx) {
   int withincharpos = idx%8;
   data += charpos;
   if(withincharpos == 0)
-    return *data & 0x80;
+    return (*data & 0x80)/128;
   if(withincharpos == 1)
-    return *data & 0x40;
+    return (*data & 0x40)/64;
   if(withincharpos == 2)
-    return *data & 0x20;
+    return (*data & 0x20)/32;
   if(withincharpos == 3)
-    return *data & 0x10;
+    return (*data & 0x10)/16;
   if(withincharpos == 4)
-    return *data & 0x8;
+    return (*data & 0x8)/8;
   if(withincharpos == 5)
-    return *data & 0x4;
+    return (*data & 0x4)/4;
   if(withincharpos == 6)
-    return *data & 0x2;
+    return (*data & 0x2)/2;
   if(withincharpos == 7)
     return *data & 0x1;
   return -1; // Error
