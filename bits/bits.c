@@ -72,10 +72,7 @@ int bit_get(const unsigned char* data, int idx) {
 }
 
 void print_byte(unsigned char b) {
-  int i;
-  for(i=0; i<8; i++) {
-    printf("%d%d%d%d%d%d%d%d", b/128, b/64, b/32, b/16, b/8, b/4, b/2, b/1);
-  }
+  printf("%d%d%d%d%d%d%d%d", b/128, (b%128)/64, ((b%128)%64)/32, (b%128%64%32)/16, (b%128%64%32%16)/8, (b%128%64%32%16%8)/4, (b%128%64%32%16%8%4)/2, (b%128%64%32%16%8%4%2));
 }
 
 unsigned char bit_get_sequence(const unsigned char* data, int idx, int how_many) {
