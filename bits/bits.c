@@ -71,8 +71,12 @@ int bit_get(const unsigned char* data, int idx) {
   return -1; // Error
 }
 
-unsigned char bit_get_sequence(const unsigned char* data, int idx, int how_many) {
+void print_byte(unsigned char b) {
+  int i;
+  for(i=0; i<8; i++) {
+    printf("%d%d%d%d%d%d%d%d", b/128, b/64, b/32, b/16, b/8, b/4, b/2, b/1);
+  }
 }
 
-void print_byte(unsigned char b) {
+unsigned char bit_get_sequence(const unsigned char* data, int idx, int how_many) {
 }
