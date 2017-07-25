@@ -72,8 +72,41 @@ int bit_get(const unsigned char* data, int idx) {
 }
 
 void print_byte(unsigned char b) {
-  printf("%d%d%d%d%d%d%d%d", b/128, (b%128)/64, ((b%128)%64)/32, (b%128%64%32)/16, (b%128%64%32%16)/8, (b%128%64%32%16%8)/4, (b%128%64%32%16%8%4)/2, (b%128%64%32%16%8%4%2));
+  printf("%d%d%d%d%d%d%d%d\n", b/128, (b%128)/64, ((b%128)%64)/32, (b%128%64%32)/16, (b%128%64%32%16)/8, (b%128%64%32%16%8)/4, (b%128%64%32%16%8%4)/2, (b%128%64%32%16%8%4%2));
 }
 
 unsigned char bit_get_sequence(const unsigned char* data, int idx, int how_many) {
+  data += idx/8;
+  int i, read=0;
+  unsigned char answer = 0x0;
+  printf("idx: %d, how_many: %d\n", idx, how_many);
+  for(i=idx%8; 8-i>0; i++) {
+    printf("This is bit_get for 1 and i is %d, read %d\n", i, read);
+    print_byte(answer);
+    if(!read == 0)
+      answer = answer << 1;
+    print_byte(answer);
+    printf("Reading with bit_get: %d\n", bit_get(data, i));
+    if(bit_get(data, i))
+      bit_set(&answer, 7);
+    else
+      bit_unset(&answer, 7);
+    read++;
+    if(read == how_many)
+      return answer;
+  }
+  data++;
+  for(; i-8<8; i++) {
+    printf("This is bit_get for 2 and i is %d\n", i);
+    printf("Answer now: %d\n", answer);
+    answer = answer << 1;
+    if(bit_get(data, i))
+      bit_set(&answer, 7);
+    else
+      bit_unset(&answer, 7);
+    read++;
+    if(read == how_many)
+      return answer;
+  }
+  return -1;
 }
