@@ -14,7 +14,9 @@
  * buffer: buffer of 20 bytes that contain the IP header. */
 void parseIp(struct ipHeader *ip, const void *buffer)
 {
-  // write code here
+  unsigned char first_byte = *buffer;
+  version = first_byte >> 4;
+  ihl = first_byte & 0x0E; // test this
 }
 
 
