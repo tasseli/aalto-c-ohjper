@@ -9,17 +9,15 @@
 
 int print_file(const char *filename) {
   FILE *f = fopen(filename, "r");
-  if (!f) {
-    fprintf(stderr, "Opening file failed\n");
-    exit(EXIT_FAILURE);  // ends program immediately (in stdlib)
-  }
+  if (!f)
+    return -1;
   int length = 0;
   while(1) {
-    int got = fgetc(f);
-    if(got == EOF)
-      return -1;
-    length++;
-    printf("%c", (char)got);
+    char string[1000] = "";
+    if(fgets(string, 1000, f) == NULL)
+      break;
+    length += strlen(string);
+    printf("%s", string);
   }
   fclose(f);
   return length;
@@ -32,10 +30,10 @@ char *difference(const char* file1, const char* file2) {
     fprintf(stderr, "Opening file failed\n");
     return 0;
   }
-  char *s1, *s2;
-  int bignumber = 1000;
-  s1 = malloc(bignumber);
-  s2 = malloc(bignumber);
+  char *s1, *s2, *s1orig, *s2orig;
+  int bignumber = 10000;
+  s1 = s1orig = malloc(bignumber);
+  s2 = s2orig = malloc(bignumber);
   while(1) {
     s1 = fgets(s1, bignumber, f1);
     s2 = fgets(s2, bignumber, f2);
@@ -46,28 +44,34 @@ char *difference(const char* file1, const char* file2) {
     s2copy = s2;
     int diff = 0;
     while(*s1copy) {
-      if(!(*s1copy == *s2copy))
+      if(!(*s1copy == *s2copy)) {
         diff = 1;
-      if(*s2copy == 0)
         break;
+      }
+      if(*s2copy == 0) {
+        diff = 1;
+        break;
+      }
       s1copy++, s2copy++;
     }
     if(*s2copy)
       diff = 1;
     if(diff) {
-      char* dashes = "----";
+      char* dashes = "----\n";
       s1 = strcat(s1, dashes);
       s1 = strcat(s1, s2);
-      free(s2);
+      strcpy(s2, s1);
+      strcpy(s1orig, s2);
+      free(s2orig);
       fclose(f1);
       fclose(f2);
-      return s1;
+      return s1orig;
     }
     s1++, s2++;
   }
   fclose(f1);
   fclose(f2);
-  free(s1);
-  free(s2);
+  free(s1orig);
+  free(s2orig);
   return 0;
 }

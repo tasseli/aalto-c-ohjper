@@ -6,13 +6,13 @@
 
 int main(void)
 {
-    printf("--- Printing file:\n");
+/*    printf("--- Printing file:\n");
     int t = print_file("testifile.c");
     if(t<0)
         printf("Opening failed!\n");
 
     printf("--- Printed %d characters\n", t);
-
+*/
     char* diff = difference("testifile.c", "testifile2.c");
     printf("\n--- Difference:\n");
     printf("%s", diff);
