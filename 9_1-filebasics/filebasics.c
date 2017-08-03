@@ -15,7 +15,7 @@ int print_file(const char *filename) {
   while(1) {
     int got = fgetc(f);
     if(got == EOF)
-      break;
+      return -1;
     length++;
     printf("%c", (char)got);
   }
