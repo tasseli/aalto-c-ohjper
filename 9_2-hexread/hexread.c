@@ -15,8 +15,9 @@ int dump_hex(const char *filename) {
     if(got == EOF)
       break;
     read++;
-    // print hex and a space
-    // every 16th mark, add \n
+    printf("%c ", (char)got);
+    if(read != 0 && read % 16 == 0)
+      printf("\n");
   }
   fclose(f);
   return read;
