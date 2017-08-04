@@ -15,7 +15,7 @@ int dump_hex(const char *filename) {
     if(got == EOF)
       break;
     read++;
-    printf("%c ", (char)got);
+    printf("%02x ", got);
     if(read != 0 && read % 16 == 0)
       printf("\n");
   }
