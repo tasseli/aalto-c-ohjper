@@ -19,5 +19,10 @@ int compareNum(const void* a, const void* b) {
 }
 
 Product* findProduct(Product* p_array, const char* searchkey, int (*cmp)(const void*, const void*)) {
-  return (Product*)bsearch(searchkey, p_array, sizeof(p_array)/sizeof(Product), sizeof(Product), cmp);
+  int i=0, count=0;
+  while(p_array[0+i].name[0] != '\0') {
+    count++;
+    i++;
+  }
+  return (Product*)bsearch(searchkey, p_array, count, sizeof(Product), cmp);
 }
