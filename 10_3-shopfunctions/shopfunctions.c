@@ -7,13 +7,15 @@
 // 2017-08-10
 
 int compareAlpha(const void* a, const void* b) {
-  
-  return 0;
+  return strcmp(((Product*)a)->name, ((Product*)b)->name);
 }
 
 int compareNum(const void* a, const void* b) {
-  
-  return 0;
+  if(((Product*)a)->in_stock > ((Product*)b)->in_stock)
+    return -1;
+  if(((Product*)b)->in_stock > ((Product*)a)->in_stock)
+    return 1;
+  return compareAlpha(a, b);
 }
 
 Product* findProduct(Product* p_array, const char* searchkey, int (*cmp)(const void*, const void*)) {
