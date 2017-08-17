@@ -22,7 +22,9 @@ struct commandline{
 
 int new_fighter(char *name, char *a_style, int hp) {
   FIGHTER uus;
+  printf("Name = %s\n", *name);
   strcpy(uus.name, name);
+  printf("Copied. Name = %s\n", uus.name);
   strcpy(uus.attack_style, a_style);
   uus.hp = hp;
   return 1;
@@ -31,8 +33,10 @@ int new_fighter(char *name, char *a_style, int hp) {
 struct commandline tokenize(char *merkkijono) {
   struct commandline cline;
   cline.command = (char)tolower(merkkijono[0]);
+  char space[2] = " \0";
+  strcpy(cline.supplement_1, strtok(&merkkijono[2], space));
+  strcpy(cline.supplement_2, strtok(NULL, space));
   cline.correct = 1;
-  printf("Tokenized! %d\n", cline.correct);
   return cline;
 }
 
@@ -41,9 +45,9 @@ char * tokens_to_string(struct commandline cmd) {
   returned[0] = cmd.command;
   returned[1] = ' ';
   strcpy(&returned[2], cmd.supplement_1);
-  returned[83] = ' ';
-  strcpy(&returned[84], cmd.supplement_2);
-  returned[165] = '\0';
+  char * space = strchr (&returned[2], (int)'\0');
+  *space = ' ';
+  strcpy(space+1, cmd.supplement_2);
   return returned;
 }
 
@@ -64,6 +68,5 @@ int main(void) {
   }
     
   free(command);
-  printf("Free ran.");
   return 0;
 }
