@@ -1,13 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 // Mikael Nenonen k90390
 // 2017-08-17 16:00
 
 struct fighter{
-  char name[160] = "";
-  char attack_style[32] = "";
-  int hp = 1;
+  char name[160];
+  char attack_style[32];
+  int hp;
 };
 #define FIGHTER struct fighter
 
@@ -21,16 +22,19 @@ int new_fighter(char *name, char *a_style, int hp) {
 
 int main(void) {
   char merkkijono[160];
+  printf("Tervetuloa taistelupeliin (vaiheessa)!\n> ");
+  fflush(stdout);
   fgets(merkkijono, sizeof(merkkijono), stdin);
-  swich(merkkijono[0])
+  switch(merkkijono[0]) {
   case 'A':
-    if(scanf() == 5)
+    if(1)
       ; // add monster
     else
       ; // herja
     break;
   default:
-    break;
+    ;
+  }
     
   return 0;
 }
