@@ -32,9 +32,18 @@ int new_fighter(char *name, char *a_style, int hp) {
 
 struct commandline tokenize(char *merkkijono) {
   struct commandline cline;
-  cline.command = (char)tolower(merkkijono[0]);
-  char space[2] = " \0";
-  strcpy(cline.supplement_1, strtok(&merkkijono[2], space));
+  int tokens = 0;
+  if(merkkijono[0] != '\0' && merkkijono[1] == ' ') {
+    cline.command = (char)toupper(merkkijono[0]);
+    tokens++;
+
+    char space[2] = " \0";
+    if(merkkijono[2] != '\0') {
+      strcpy(cline.supplement_1, strtok(&merkkijono[2], space));
+      tokens++;
+    }
+  }
+  if(
   strcpy(cline.supplement_2, strtok(NULL, space));
   cline.correct = 1;
   return cline;
@@ -60,7 +69,7 @@ int main(void) {
   cline = tokenize(merkkijono);
   char* command = tokens_to_string(cline);
   switch(merkkijono[0]) {
-  case 'a':
+  case 'A':
     printf("%s\nPituus: %d\n", command, sizeof(merkkijono));
     break;
   default:
