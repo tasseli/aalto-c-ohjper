@@ -30,26 +30,64 @@ int new_fighter(char *name, char *a_style, int hp) {
   return 1;
 }
 
+int has_alpha(char* string) {
+  int i;
+  for(i=0; i<160 && string[i] != ' ' && string[i] != '\0' && string[i] != '\n'; i++) {
+    if(isalpha(string[i]))
+      return 1;
+  }
+  return 0;
+}
+
 struct commandline tokenize(char *merkkijono) {
   struct commandline cline;
-  int tokens = 0;
-  if(merkkijono[0] != '\0' && merkkijono[1] == ' ') {
-    cline.command = (char)toupper(merkkijono[0]);
-    tokens++;
-
-    char space[2] = " \0";
-    if(merkkijono[2] != '\0') {
-      strcpy(cline.supplement_1, strtok(&merkkijono[2], space));
-      tokens++;
+  char tokens[4][80];
+  char *token;
+  char space[2] = " \0";
+  int token_count = 0;
+  int read = 0;
+  if(isalpha(merkkijono[0])) {
+    token = strcpy(tokens[0], strtok(merkkijono, space));
+    printf("Luettu ekaan tokeniin merkkeja: %d\n", strlen(token));
+    read += (strlen(token));
+    token_count = 1;
+    while(has_alpha(&merkkijono[read]) && token_count < 4) {
+      token = strcpy(tokens[token_count], strtok(merkkijono, space));
+      if(token != NULL && has_alpha(token)) {
+        token_count++;
+        read += strlen(token)+1;
+      }
     }
+    cline.correct = token_count;
+    if (cline.correct > 0)
+      cline.command = tokens[0][0];
+    if (cline.correct > 1)
+      strcpy(cline.supplement_1, tokens[1]);
+    if (cline.correct > 2)
+      strcpy(cline.supplement_2, tokens[2]);
+    return cline;
+  } else {
+    cline.correct = 0;
+    printf("Something went wrong in tokenizer. Seems the first letter of command line wasn't a letter.\n");
+    return cline;
   }
-  if(
-  strcpy(cline.supplement_2, strtok(NULL, space));
-  cline.correct = 1;
+  
+  if(token_count < 1 || token_count > 3) {
+    cline.correct = 0;
+    printf("Something went wrong in tokenizer. Seems token count isn't in sane range (1-3).\n");
+    return cline;
+  }
+  
+  /*cline.command = (char)toupper(merkkijono[0]);
+  strcpy(cline.supplement_1, tokens[1]);
+  printf("%s\n", cline.supplement_1);
+  fflush(stdout);
+  strcpy(cline.supplement_2, tokens[2]);*/
+  //cline.correct = 1;
   return cline;
 }
 
-char * tokens_to_string(struct commandline cmd) {
+/*char * tokens_to_string(struct commandline cmd) {
   char *returned = malloc(166);
   returned[0] = cmd.command;
   returned[1] = ' ';
@@ -59,24 +97,31 @@ char * tokens_to_string(struct commandline cmd) {
   strcpy(space+1, cmd.supplement_2);
   return returned;
 }
-
+*/
 int main(void) {
   char merkkijono[160];
+  memset(merkkijono, '\0', sizeof(merkkijono));
   printf("Tervetuloa taistelupeliin (vaiheessa)!\n> ");
   fflush(stdout);
   fgets(merkkijono, sizeof(merkkijono), stdin);
-  struct commandline cline;
-  cline = tokenize(merkkijono);
-  char* command = tokens_to_string(cline);
-  switch(merkkijono[0]) {
-  case 'A':
-    printf("%s\nPituus: %d\n", command, sizeof(merkkijono));
-    break;
-  default:
-    ;
-  }
-    
-  free(command);
+  struct commandline cline = tokenize(merkkijono);
+  /*
+  if(cline.correct == 1) {
+    printf("cline correct!\n");
+    fflush(stdout);
+    char* command = tokens_to_string(cline);
+    switch(merkkijono[0]) {
+    case 'A':
+      printf("%s\nPituus: %d\n", command, sizeof(merkkijono));
+      break;
+    default:
+      ;
+    }
+      
+    free(command);
+  } else {
+    printf("Problem with tokenizer!\n");
+  }*/
   return 0;
 }
  
