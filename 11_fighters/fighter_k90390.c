@@ -79,3 +79,27 @@ int main(void) {
   free(command);
   return 0;
 }
+ 
+ /*
+ Ideas for attack styles:
+ - Harmful wish     1
+ - Guilt trip       1
+ - Growl            1
+ - Shriek           1
+ - Bite             2
+ - Curse            2
+ - Emasculate       2
+ - Punch            3
+ - Crush            3
+ - Headbutt         4
+ - Kick             5
+ - Poison bite      7
+ - Roundhouse kick  7
+ - Stomp            8
+ - Fire punch       10
+ - Power throw      12
+ - Defenestrate     15
+ - Deorbit          35
+ - Decimate         n*9/10
+ - Decapitate       55
+ */
