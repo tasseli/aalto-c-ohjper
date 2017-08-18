@@ -69,7 +69,7 @@ FIGHTER *new_fighter(char *name, char *a_style, int hp) {
 }
 
 void print_fighter(FIGHTER f) {
-  printf("Printing fighter\nName: \t\t%s\nAttack style: \t%s\nHP: \t\t%d\n", f.name, f.attack_style, f.hp);
+  printf("Nimi: \t\t%s\nHyökkäys: \t%s\nHP: \t\t%d\n", f.name, f.attack_style, f.hp);
 }
 
 void print_all_fighters() {
@@ -104,7 +104,7 @@ struct commandline{
 };
 
 void print_commandline(struct commandline cl) {
-  printf("Command: %c\nSup1: %s\nSup2: %s\nCorrect: %d\n", cl.command, cl.supplement_1, cl.supplement_2, cl.correct);
+  printf("Komento: %c\nTieto1: %s\nTieto2: %s\nOikeita: %d\n", cl.command, cl.supplement_1, cl.supplement_2, cl.correct);
 }
 
 int has_info(char *string) {
@@ -123,7 +123,7 @@ char *tok(char *str, const char *delim, int *read) {
     (*read)++;
     countedstr++;
   }
-  if(DEBUG) printf("Tokenized %d chars so far (including spaces earlier); %s\n", *read, countedstr_cpy);
+  if(DEBUG) printf("Luettu %d merkkiä onnistuneesti (sis. aiemmat välit) %s\n", *read, countedstr_cpy);
   (*read)++; // for the token separator. Assuming there's only one.
   return countedstr_cpy;
 }
@@ -155,13 +155,13 @@ struct commandline tokenize(char *merkkijono) {
     return cline;
   } else {
     cline.correct = 0;
-    printf("Something went wrong in tokenizer. Seems the first letter of command line wasn't a letter.\n");
+    printf("Virhe: ensimmäinen merkki tuskin kelpasi komennoksi.\n");
     return cline;
   }
   
   if(token_count < 1 || token_count > 3) {
     cline.correct = 0;
-    printf("Something went wrong in tokenizer. Seems token count isn't in sane range (1-3).\n");
+    printf("Virhe: komento ei ollut järkevän kokoinen (1-3 osaa).\n");
     return cline;
   }
   
@@ -200,26 +200,32 @@ int main(void) {
       //char* command = tokens_to_string(cline);
       switch(cline.command) {
       case 'A':
-        if(DEBUG) print_commandline(cline);
-        FIGHTER *fpoint;
-        if(DEBUG) printf("atoi result: %d\n", atoi(cline.supplement_2));
-        fflush(stdout);
-        fpoint = new_fighter(cline.supplement_1, "Headbutt", atoi(cline.supplement_2));
-        if(DEBUG) printf("Figher created!\n\n");
-        fflush(stdout);
-        print_fighter(*fpoint);
+        if(cline.correct == 3) {
+          if(DEBUG) print_commandline(cline);
+          FIGHTER *fpoint;
+          if(DEBUG) printf("atoi result: %d\n", atoi(cline.supplement_2));
+          fflush(stdout);
+          fpoint = new_fighter(cline.supplement_1, "Headbutt", atoi(cline.supplement_2));
+          if(DEBUG) printf("Figher created!\n\n");
+          fflush(stdout);
+          printf("Tulostetaan taistelija:\n");
+          print_fighter(*fpoint);
+        } else {
+          printf("(A)dding tarvitsee kolme osaa; komennon A, nimen, ja HP:t.\n");
+        }
         break;
       case 'H':
         printf("Valitse joku seuraavista:\nA <nimi> <HP>\tlisää taistelijan\nQ\t\tlopettaa\n");
         break;
       case 'L':
+        printf("Tulostetaan taistelijat:\n");
         print_all_fighters();
         break;
       case 'D':
         if(remove_fighter(cline.supplement_1))
-          printf("Remove seems to have succeeded!\n");
+          printf("Taistelijan poisto onnistui.\n");
         else
-          printf("Remove didn't succeed!\n");
+          printf("Virhe: Taistelijan poisto epäonnistui!\n");
         break;
       case 'Q':
         printf("\nKiitos pelistä.\n");
@@ -229,7 +235,7 @@ int main(void) {
       }
       //free(command);
     } else {
-      printf("Problem with tokenizer!\n");
+      printf("Virhe: komento ei ollut järkevän kokoinen (1-3 osaa).\n");
     }
   }
   free_all_fighters();
