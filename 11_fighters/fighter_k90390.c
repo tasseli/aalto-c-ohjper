@@ -22,6 +22,10 @@ struct commandline{
   int correct;
 };
 
+void print_commandline(struct commandline cl) {
+  printf("Command: %c\nSup1: %s\nSup2: %s\nCorrect: %d\n", cl.command, cl.supplement_1, cl.supplement_2, cl.correct);
+}
+
 int new_fighter(char *name, char *a_style, int hp) {
   FIGHTER uus;
   printf("Name = %s\n", *name);
@@ -62,20 +66,17 @@ struct commandline tokenize(char *merkkijono) {
   int read = 0;
   if(isalpha(merkkijono[0])) {
     token = strcpy(tokens[0], tok(merkkijono, space, &read));
-    //printf("Luettu ekaan tokeniin merkkeja: %d\n", strlen(token));
     token_count = 1;
     while(has_alpha(&(merkkijono[read])) && token_count < 4) {
-      //printf("in while loop\n");
       fflush(stdout);
       token = strcpy(tokens[token_count], tok(NULL, space, &read));
       if(token != NULL && has_alpha(token)) {
-        //printf("in if\n");
         token_count++;
       }
     }
     cline.correct = token_count;
     if (cline.correct > 0)
-      cline.command = tokens[0][0];
+      cline.command = toupper(tokens[0][0]);
     if (cline.correct > 1)
       strcpy(cline.supplement_1, tokens[1]);
     if (cline.correct > 2)
@@ -95,14 +96,12 @@ struct commandline tokenize(char *merkkijono) {
   
   cline.command = (char)toupper(merkkijono[0]);
   strcpy(cline.supplement_1, tokens[1]);
-  //printf("%s\n", cline.supplement_1);
-  //fflush(stdout);
   strcpy(cline.supplement_2, tokens[2]);
   cline.correct = 1;
   return cline;
 }
 
-/*char * tokens_to_string(struct commandline cmd) {
+char * tokens_to_string(struct commandline cmd) {
   char *returned = malloc(166);
   returned[0] = cmd.command;
   returned[1] = ' ';
@@ -112,7 +111,7 @@ struct commandline tokenize(char *merkkijono) {
   strcpy(space+1, cmd.supplement_2);
   return returned;
 }
-*/
+
 int main(void) {
   char merkkijono[160];
   memset(merkkijono, '\0', sizeof(merkkijono));
@@ -120,23 +119,25 @@ int main(void) {
   fflush(stdout);
   fgets(merkkijono, sizeof(merkkijono), stdin);
   struct commandline cline = tokenize(merkkijono);
-  /*
-  if(cline.correct == 1) {
+  
+  if(cline.correct >= 1 && cline.correct <= 3) {
     printf("cline correct!\n");
     fflush(stdout);
-    char* command = tokens_to_string(cline);
-    switch(merkkijono[0]) {
+    print_commandline(cline);
+    //char* command = tokens_to_string(cline);
+    switch(cline.command) {
     case 'A':
-      printf("%s\nPituus: %d\n", command, sizeof(merkkijono));
+      //printf("%s\nPituus: %d\n", command, sizeof(merkkijono));
+      print_commandline(cline);
       break;
     default:
       ;
     }
       
-    free(command);
+    //free(command);
   } else {
     printf("Problem with tokenizer!\n");
-  }*/
+  }
   return 0;
 }
  
