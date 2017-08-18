@@ -27,6 +27,33 @@ int add_fighter(FIGHTER *added, FIGHTER *member) {
   last = added;
 }
 
+int remove_fighter(char *name){
+  int success = 0;
+  FIGHTER *current = first;
+  FIGHTER *previous = NULL;
+  while(current->next != NULL) {
+    if(!strcmp(current->name, name)) { // I wonder if strcmp works like I want it to
+      success = 1;
+      if(previous == NULL) { first = current->next; free(current); } // Special case, special indentation. Name to be removed matched
+      else { // Name to be removed matched
+        previous->next = current->next;
+        free(current);
+      }
+    } else { // Name didn't match
+      current = current->next;
+    }
+  }
+  if(!strcmp(current->name, name)) { // One last time
+    success = 1;
+    if(previous == NULL) { first = current->next; free(current); } // Special case, special indentation. Name to be removed matched
+    else { // Name to be removed matched
+      previous->next = current->next;
+      free(current);
+    }
+  }
+  return success;
+}
+
 FIGHTER *new_fighter(char *name, char *a_style, int hp) {
   FIGHTER *uus = malloc(sizeof(FIGHTER));
   strcpy(uus->name, name);
@@ -184,6 +211,15 @@ int main(void) {
       case 'H':
         printf("Valitse joku seuraavista:\nA <nimi> <HP>\tlisää taistelijan\nQ\t\tlopettaa\n");
         break;
+      case 'L':
+        print_all_fighters();
+        break;
+      case 'D':
+        if(remove_fighter(cline.supplement_1))
+          printf("Remove seems to have succeeded!\n");
+        else
+          printf("Remove didn't succeed!\n");
+        break;
       case 'Q':
         printf("\nKiitos pelistä.\n");
         break;
@@ -195,8 +231,7 @@ int main(void) {
       printf("Problem with tokenizer!\n");
     }
   }
-  print_all_fighters();
-  //free_all_fighters();
+  free_all_fighters();
   return 0;
 }
  
