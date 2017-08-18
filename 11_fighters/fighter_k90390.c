@@ -39,6 +39,18 @@ int has_alpha(char* string) {
   return 0;
 }
 
+char *tok(char *str, const char *delim, int *read) {
+  char *countedstr = strtok(str, delim);
+  char *countedstr_cpy = countedstr;
+  while(*countedstr != ' ' && *countedstr != '\0' && *countedstr != '\n') {
+    (*read)++;
+    countedstr++;
+  }
+  printf("Tokenized %d chars so far (including spaces earlier); %s\n", *read, countedstr_cpy);
+  (*read)++; // for the token separator. Assuming there's only one.
+  return countedstr_cpy;
+}
+
 struct commandline tokenize(char *merkkijono) {
   struct commandline cline;
   char tokens[4][80];
@@ -47,15 +59,16 @@ struct commandline tokenize(char *merkkijono) {
   int token_count = 0;
   int read = 0;
   if(isalpha(merkkijono[0])) {
-    token = strcpy(tokens[0], strtok(merkkijono, space));
-    printf("Luettu ekaan tokeniin merkkeja: %d\n", strlen(token));
-    read += (strlen(token));
+    token = strcpy(tokens[0], tok(merkkijono, space, &read));
+    //printf("Luettu ekaan tokeniin merkkeja: %d\n", strlen(token));
     token_count = 1;
-    while(has_alpha(&merkkijono[read]) && token_count < 4) {
-      token = strcpy(tokens[token_count], strtok(merkkijono, space));
+    while(has_alpha(&(merkkijono[read])) && token_count < 4) {
+      printf("in while loop\n");
+      fflush(stdout);
+      token = strcpy(tokens[token_count], tok(NULL, space, &read));
       if(token != NULL && has_alpha(token)) {
+        printf("in if\n");
         token_count++;
-        read += strlen(token)+1;
       }
     }
     cline.correct = token_count;
