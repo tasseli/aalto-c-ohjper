@@ -121,9 +121,9 @@ int main(void) {
   struct commandline cline = tokenize(merkkijono);
   
   if(cline.correct >= 1 && cline.correct <= 3) {
-    printf("cline correct!\n");
-    fflush(stdout);
-    print_commandline(cline);
+    //printf("cline correct!\n");
+    //fflush(stdout);
+    //print_commandline(cline);
     //char* command = tokens_to_string(cline);
     switch(cline.command) {
     case 'A':
