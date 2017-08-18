@@ -41,6 +41,7 @@ int remove_fighter(char *name){
         free(current);
       }
     } else { // Name didn't match
+      previous = current;
       current = current->next;
     }
   }
