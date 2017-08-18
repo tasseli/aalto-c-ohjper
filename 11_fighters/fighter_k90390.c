@@ -16,6 +16,10 @@ struct fighter{
 #define FIGHTER struct fighter
 
 FIGHTER *new_fighter(char *name, char *a_style, int hp) {
+  char nimitesti[160];
+  strcpy(nimitesti, name);
+  printf("Test! %s\n", nimitesti);
+  fflush(stdout);
   FIGHTER *uus = malloc(sizeof(FIGHTER));
   printf("Name = %s\n", *name);
   strcpy(uus->name, name);
@@ -72,7 +76,6 @@ struct commandline tokenize(char *merkkijono) {
     token = strcpy(tokens[0], tok(merkkijono, space, &read));
     token_count = 1;
     while(has_info(&(merkkijono[read])) && token_count < 4) {
-      fflush(stdout);
       token = strcpy(tokens[token_count], tok(NULL, space, &read));
       if(token != NULL && has_info(token)) {
         token_count++;
@@ -81,8 +84,9 @@ struct commandline tokenize(char *merkkijono) {
     cline.correct = token_count;
     if (cline.correct > 0)
       cline.command = toupper(tokens[0][0]);
-    if (cline.correct > 1)
+    if (cline.correct > 1) {
       strcpy(cline.supplement_1, tokens[1]);
+    }
     if (cline.correct > 2)
       strcpy(cline.supplement_2, tokens[2]);
     return cline;
@@ -133,10 +137,14 @@ int main(void) {
     case 'A':
       //printf("%s\nPituus: %d\n", command, sizeof(merkkijono));
       if(DEBUG) print_commandline(cline);
-      printf("cline.sup2: %s\n", cline.supplement_2);
+      FIGHTER *first;
+      printf("cline.sup2: %s\natoi result: %d\n", cline.supplement_2, atoi(cline.supplement_2));
       fflush(stdout);
-      //FIGHTER *first = new_fighter(cline.supplement_1, "Headbutt", atoi(cline.supplement_2));
-      //print_fighter(*first);
+      first = new_fighter(cline.supplement_1, "Headbutt", atoi(cline.supplement_2));
+      printf("Figher created!\n");
+      fflush(stdout);
+      print_fighter(*first);
+      free(first);
       break;
     default:
       ;
@@ -146,6 +154,7 @@ int main(void) {
   } else {
     printf("Problem with tokenizer!\n");
   }
+  
   return 0;
 }
  
