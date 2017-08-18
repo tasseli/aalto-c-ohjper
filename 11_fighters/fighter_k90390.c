@@ -16,12 +16,10 @@ struct fighter{
 #define FIGHTER struct fighter
 
 FIGHTER *new_fighter(char *name, char *a_style, int hp) {
-  char nimitesti[160];
-  strcpy(nimitesti, name);
-  printf("Test! %s\n", nimitesti);
-  fflush(stdout);
+  char line[160];
   FIGHTER *uus = malloc(sizeof(FIGHTER));
-  printf("Name = %s\n", *name);
+  strcpy(line, name);
+  printf("Name = %s\n", line);
   strcpy(uus->name, name);
   printf("Copied. Name = %s\n", uus->name);
   strcpy(uus->attack_style, a_style);
