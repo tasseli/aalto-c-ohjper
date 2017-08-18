@@ -6,6 +6,8 @@
 // Mikael Nenonen k90390
 // 2017-08-17 16:00
 
+int DEBUG = 1;
+
 struct fighter{
   char name[80];
   char attack_style[32];
@@ -46,7 +48,7 @@ char *tok(char *str, const char *delim, int *read) {
     (*read)++;
     countedstr++;
   }
-  printf("Tokenized %d chars so far (including spaces earlier); %s\n", *read, countedstr_cpy);
+  if(DEBUG) printf("Tokenized %d chars so far (including spaces earlier); %s\n", *read, countedstr_cpy);
   (*read)++; // for the token separator. Assuming there's only one.
   return countedstr_cpy;
 }
@@ -63,11 +65,11 @@ struct commandline tokenize(char *merkkijono) {
     //printf("Luettu ekaan tokeniin merkkeja: %d\n", strlen(token));
     token_count = 1;
     while(has_alpha(&(merkkijono[read])) && token_count < 4) {
-      printf("in while loop\n");
+      //printf("in while loop\n");
       fflush(stdout);
       token = strcpy(tokens[token_count], tok(NULL, space, &read));
       if(token != NULL && has_alpha(token)) {
-        printf("in if\n");
+        //printf("in if\n");
         token_count++;
       }
     }
@@ -91,12 +93,12 @@ struct commandline tokenize(char *merkkijono) {
     return cline;
   }
   
-  /*cline.command = (char)toupper(merkkijono[0]);
+  cline.command = (char)toupper(merkkijono[0]);
   strcpy(cline.supplement_1, tokens[1]);
-  printf("%s\n", cline.supplement_1);
-  fflush(stdout);
-  strcpy(cline.supplement_2, tokens[2]);*/
-  //cline.correct = 1;
+  //printf("%s\n", cline.supplement_1);
+  //fflush(stdout);
+  strcpy(cline.supplement_2, tokens[2]);
+  cline.correct = 1;
   return cline;
 }
 
