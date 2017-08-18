@@ -8,23 +8,64 @@
 
 int DEBUG = 0;
 
+#define FIGHTER struct fighter
 struct fighter{
   char name[80];
   char attack_style[32];
   int hp;
+  FIGHTER *next;
 };
-#define FIGHTER struct fighter
+
+FIGHTER *first = NULL;
+FIGHTER *last = NULL;
+
+int add_fighter(FIGHTER *added, FIGHTER *member) {
+  while(member->next != NULL && member != last) {
+    member = member->next;
+  }
+  member->next = added;
+  last = added;
+}
 
 FIGHTER *new_fighter(char *name, char *a_style, int hp) {
   FIGHTER *uus = malloc(sizeof(FIGHTER));
   strcpy(uus->name, name);
   strcpy(uus->attack_style, a_style);
   uus->hp = hp;
+  uus->next = NULL;
+  if(first == NULL)
+    first = last = uus;
+  else
+    add_fighter(uus, first);
   return uus;
 }
 
 void print_fighter(FIGHTER f) {
   printf("Printing fighter\nName: \t\t%s\nAttack style: \t%s\nHP: \t\t%d\n", f.name, f.attack_style, f.hp);
+}
+
+void print_all_fighters() {
+  FIGHTER *current = first;
+  if(current) {
+    while(current->next) {
+      print_fighter(*current);
+      current = current->next;
+    }
+    print_fighter(*current);
+  }
+}
+
+void free_all_fighters() {
+  FIGHTER *current = first;
+  FIGHTER *freed;
+  if(current) {
+    while(current->next) {
+      freed = current;
+      current = current->next;
+      free(freed);
+    }
+    free(current);
+  }
 }
 
 struct commandline{
@@ -132,14 +173,13 @@ int main(void) {
       switch(cline.command) {
       case 'A':
         if(DEBUG) print_commandline(cline);
-        FIGHTER *first;
+        FIGHTER *fpoint;
         if(DEBUG) printf("atoi result: %d\n", atoi(cline.supplement_2));
         fflush(stdout);
-        first = new_fighter(cline.supplement_1, "Headbutt", atoi(cline.supplement_2));
+        fpoint = new_fighter(cline.supplement_1, "Headbutt", atoi(cline.supplement_2));
         if(DEBUG) printf("Figher created!\n\n");
         fflush(stdout);
-        print_fighter(*first);
-        free(first);
+        print_fighter(*fpoint);
         break;
       case 'H':
         printf("Valitse joku seuraavista:\nA <nimi> <HP>\tlisää taistelijan\nQ\t\tlopettaa\n");
@@ -155,7 +195,8 @@ int main(void) {
       printf("Problem with tokenizer!\n");
     }
   }
-  
+  print_all_fighters();
+  //free_all_fighters();
   return 0;
 }
  
@@ -182,3 +223,4 @@ int main(void) {
  - Decimate         n*9/10
  - Decapitate       55
  */
+ 
