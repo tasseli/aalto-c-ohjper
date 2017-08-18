@@ -6,7 +6,7 @@
 // Mikael Nenonen k90390
 // 2017-08-17 16:00
 
-int DEBUG = 1;
+int DEBUG = 0;
 
 struct fighter{
   char name[80];
@@ -117,36 +117,43 @@ char * tokens_to_string(struct commandline cmd) {
 int main(void) {
   char merkkijono[160];
   memset(merkkijono, '\0', sizeof(merkkijono));
-  printf("Tervetuloa taistelupeliin (vaiheessa)!\n> ");
+  printf("Tervetuloa taistelupeliin (vaiheessa)!\n");
   fflush(stdout);
-  fgets(merkkijono, sizeof(merkkijono), stdin);
-  struct commandline cline = tokenize(merkkijono);
-  
-  if(cline.correct >= 1 && cline.correct <= 3) {
-    //printf("cline correct!\n");
-    //fflush(stdout);
-    //print_commandline(cline);
-    //char* command = tokens_to_string(cline);
-    switch(cline.command) {
-    case 'A':
-      //printf("%s\nPituus: %d\n", command, sizeof(merkkijono));
-      if(DEBUG) print_commandline(cline);
-      FIGHTER *first;
-      if(DEBUG) printf("atoi result: %d\n", atoi(cline.supplement_2));
-      fflush(stdout);
-      first = new_fighter(cline.supplement_1, "Headbutt", atoi(cline.supplement_2));
-      if(DEBUG) printf("Figher created!\n\n");
-      fflush(stdout);
-      print_fighter(*first);
-      free(first);
-      break;
-    default:
-      ;
+  struct commandline cline;
+  cline.command = 'H';
+  while(cline.command != 'Q') {
+    printf("\nAnna komento\n> ");
+    fflush(stdout);
+    fgets(merkkijono, sizeof(merkkijono), stdin);
+    cline = tokenize(merkkijono);
+    
+    if(cline.correct >= 1 && cline.correct <= 3) {
+      //char* command = tokens_to_string(cline);
+      switch(cline.command) {
+      case 'A':
+        if(DEBUG) print_commandline(cline);
+        FIGHTER *first;
+        if(DEBUG) printf("atoi result: %d\n", atoi(cline.supplement_2));
+        fflush(stdout);
+        first = new_fighter(cline.supplement_1, "Headbutt", atoi(cline.supplement_2));
+        if(DEBUG) printf("Figher created!\n\n");
+        fflush(stdout);
+        print_fighter(*first);
+        free(first);
+        break;
+      case 'H':
+        printf("Valitse joku seuraavista:\nA <nimi> <HP>\tlisää taistelijan\nQ\t\tlopettaa\n");
+        break;
+      case 'Q':
+        printf("\nKiitos pelistä.\n");
+        break;
+      default:
+        ;
+      }
+      //free(command);
+    } else {
+      printf("Problem with tokenizer!\n");
     }
-      
-    //free(command);
-  } else {
-    printf("Problem with tokenizer!\n");
   }
   
   return 0;
