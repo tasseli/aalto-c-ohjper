@@ -15,6 +15,20 @@ struct fighter{
 };
 #define FIGHTER struct fighter
 
+FIGHTER *new_fighter(char *name, char *a_style, int hp) {
+  FIGHTER *uus = malloc(sizeof(FIGHTER));
+  printf("Name = %s\n", *name);
+  strcpy(uus->name, name);
+  printf("Copied. Name = %s\n", uus->name);
+  strcpy(uus->attack_style, a_style);
+  uus->hp = hp;
+  return uus;
+}
+
+void print_fighter(FIGHTER f) {
+  printf("Printing fighter\nName: %s\nAttack style: %s\nHP: %d\n", f.name, f.attack_style, f.hp);
+}
+
 struct commandline{
   char command;
   char supplement_1[80];
@@ -26,20 +40,10 @@ void print_commandline(struct commandline cl) {
   printf("Command: %c\nSup1: %s\nSup2: %s\nCorrect: %d\n", cl.command, cl.supplement_1, cl.supplement_2, cl.correct);
 }
 
-int new_fighter(char *name, char *a_style, int hp) {
-  FIGHTER uus;
-  printf("Name = %s\n", *name);
-  strcpy(uus.name, name);
-  printf("Copied. Name = %s\n", uus.name);
-  strcpy(uus.attack_style, a_style);
-  uus.hp = hp;
-  return 1;
-}
-
-int has_alpha(char* string) {
+int has_info(char* string) {
   int i;
   for(i=0; i<160 && string[i] != ' ' && string[i] != '\0' && string[i] != '\n'; i++) {
-    if(isalpha(string[i]))
+    if(isalpha(string[i]) || isdigit(string[i]))
       return 1;
   }
   return 0;
@@ -67,10 +71,10 @@ struct commandline tokenize(char *merkkijono) {
   if(isalpha(merkkijono[0])) {
     token = strcpy(tokens[0], tok(merkkijono, space, &read));
     token_count = 1;
-    while(has_alpha(&(merkkijono[read])) && token_count < 4) {
+    while(has_info(&(merkkijono[read])) && token_count < 4) {
       fflush(stdout);
       token = strcpy(tokens[token_count], tok(NULL, space, &read));
-      if(token != NULL && has_alpha(token)) {
+      if(token != NULL && has_info(token)) {
         token_count++;
       }
     }
@@ -128,7 +132,11 @@ int main(void) {
     switch(cline.command) {
     case 'A':
       //printf("%s\nPituus: %d\n", command, sizeof(merkkijono));
-      print_commandline(cline);
+      if(DEBUG) print_commandline(cline);
+      printf("cline.sup2: %s\n", cline.supplement_2);
+      fflush(stdout);
+      //FIGHTER *first = new_fighter(cline.supplement_1, "Headbutt", atoi(cline.supplement_2));
+      //print_fighter(*first);
       break;
     default:
       ;
