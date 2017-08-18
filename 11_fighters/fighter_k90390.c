@@ -6,7 +6,7 @@
 // Mikael Nenonen k90390
 // 2017-08-17 16:00
 
-int DEBUG = 0;
+int DEBUG = 1;
 
 struct fighter{
   char name[80];
@@ -132,10 +132,10 @@ int main(void) {
       //printf("%s\nPituus: %d\n", command, sizeof(merkkijono));
       if(DEBUG) print_commandline(cline);
       FIGHTER *first;
-      if(DEBUG) printf("cline.sup2: %s\natoi result: %d\n", cline.supplement_2, atoi(cline.supplement_2));
+      if(DEBUG) printf("atoi result: %d\n", atoi(cline.supplement_2));
       fflush(stdout);
       first = new_fighter(cline.supplement_1, "Headbutt", atoi(cline.supplement_2));
-      if(DEBUG) printf("Figher created!\n");
+      if(DEBUG) printf("Figher created!\n\n");
       fflush(stdout);
       print_fighter(*first);
       free(first);
