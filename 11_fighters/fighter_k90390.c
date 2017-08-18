@@ -6,7 +6,7 @@
 // Mikael Nenonen k90390
 // 2017-08-17 16:00
 
-int DEBUG = 1;
+int DEBUG = 0;
 
 struct fighter{
   char name[80];
@@ -16,19 +16,15 @@ struct fighter{
 #define FIGHTER struct fighter
 
 FIGHTER *new_fighter(char *name, char *a_style, int hp) {
-  char line[160];
   FIGHTER *uus = malloc(sizeof(FIGHTER));
-  strcpy(line, name);
-  printf("Name = %s\n", line);
   strcpy(uus->name, name);
-  printf("Copied. Name = %s\n", uus->name);
   strcpy(uus->attack_style, a_style);
   uus->hp = hp;
   return uus;
 }
 
 void print_fighter(FIGHTER f) {
-  printf("Printing fighter\nName: %s\nAttack style: %s\nHP: %d\n", f.name, f.attack_style, f.hp);
+  printf("Printing fighter\nName: \t\t%s\nAttack style: \t%s\nHP: \t\t%d\n", f.name, f.attack_style, f.hp);
 }
 
 struct commandline{
@@ -136,10 +132,10 @@ int main(void) {
       //printf("%s\nPituus: %d\n", command, sizeof(merkkijono));
       if(DEBUG) print_commandline(cline);
       FIGHTER *first;
-      printf("cline.sup2: %s\natoi result: %d\n", cline.supplement_2, atoi(cline.supplement_2));
+      if(DEBUG) printf("cline.sup2: %s\natoi result: %d\n", cline.supplement_2, atoi(cline.supplement_2));
       fflush(stdout);
       first = new_fighter(cline.supplement_1, "Headbutt", atoi(cline.supplement_2));
-      printf("Figher created!\n");
+      if(DEBUG) printf("Figher created!\n");
       fflush(stdout);
       print_fighter(*first);
       free(first);
