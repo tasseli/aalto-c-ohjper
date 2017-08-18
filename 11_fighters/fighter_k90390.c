@@ -25,6 +25,7 @@ int add_fighter(FIGHTER *added, FIGHTER *member) {
   }
   member->next = added;
   last = added;
+  return 1;
 }
 
 int remove_fighter(char *name){
@@ -106,7 +107,7 @@ void print_commandline(struct commandline cl) {
   printf("Command: %c\nSup1: %s\nSup2: %s\nCorrect: %d\n", cl.command, cl.supplement_1, cl.supplement_2, cl.correct);
 }
 
-int has_info(char* string) {
+int has_info(char *string) {
   int i;
   for(i=0; i<160 && string[i] != ' ' && string[i] != '\0' && string[i] != '\n'; i++) {
     if(isalpha(string[i]) || isdigit(string[i]))
