@@ -122,7 +122,7 @@ void print_commandline(struct commandline cl) {
 int has_info(char *string) {
   int i;
   for(i=0; i<160 && string[i] != ' ' && string[i] != '\0' && string[i] != '\n'; i++) {
-    if(isalpha(string[i]) || isdigit(string[i]) || string[i] == '?')
+    if(isalpha(string[i]) || isdigit(string[i]) || string[i] == '?' || string[i] == '-')
       return 1;
   }
   return 0;
@@ -231,11 +231,17 @@ int main(void) {
         print_all_fighters();
         break;
       case 'D':
-        printf("Giving as remove parameter: '%s'\n", replace_newlines(cline.supplement_1));
-        if(remove_fighter(cline.supplement_1))
-          printf("Taistelijan poisto onnistui.\n");
-        else
-          printf("Virhe: Taistelijan poisto epäonnistui!\n");
+        strcpy(cline.supplement_1, replace_newlines(cline.supplement_1));
+        if(DEBUG) printf("Annetaan poista-parametrina: '%s'\n", cline.supplement_1);
+        if(cline.supplement_1[0] == '-' && toupper(cline.supplement_1[0]) == 'A') {
+          free_all_fighters();
+          printf("Poistettu kaikki taistelijat!\n");
+        } else {
+          if(remove_fighter(cline.supplement_1))
+            printf("Taistelijan poisto onnistui.\n");
+          else
+            printf("Virhe: Taistelijan poisto epäonnistui!\n");
+        }
         break;
       case 'Q':
         printf("\nKiitos pelistä.\n");
