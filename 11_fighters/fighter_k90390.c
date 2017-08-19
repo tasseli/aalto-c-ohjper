@@ -231,7 +231,7 @@ int main(void) {
         print_all_fighters();
         break;
       case 'D':
-        if(DEBUG) printf("Giving as remove parameter: '%s'\n", replace_newlines(cline.supplement_1));
+        printf("Giving as remove parameter: '%s'\n", replace_newlines(cline.supplement_1));
         if(remove_fighter(cline.supplement_1))
           printf("Taistelijan poisto onnistui.\n");
         else
