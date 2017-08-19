@@ -6,7 +6,11 @@
 // Mikael Nenonen k90390
 // 2017-08-17 16:00
 
-int DEBUG = 0;
+int DEBUG = 1;
+
+// FIGHTER
+// struct and a linked list, accessible by *first and *last item.
+// Also functions for creating, adding (to list), removing (18.8. under construction), printing, printing all, and freeing all fighters.
 
 #define FIGHTER struct fighter
 struct fighter{
@@ -26,6 +30,19 @@ int add_fighter(FIGHTER *added, FIGHTER *member) {
   member->next = added;
   last = added;
   return 1;
+}
+
+FIGHTER *new_fighter(char *name, char *a_style, int hp) {
+  FIGHTER *uus = malloc(sizeof(FIGHTER));
+  strcpy(uus->name, name);
+  strcpy(uus->attack_style, a_style);
+  uus->hp = hp;
+  uus->next = NULL;
+  if(first == NULL)
+    first = last = uus;
+  else
+    add_fighter(uus, first);
+  return uus;
 }
 
 int remove_fighter(char *name){
@@ -56,19 +73,6 @@ int remove_fighter(char *name){
   return success;
 }
 
-FIGHTER *new_fighter(char *name, char *a_style, int hp) {
-  FIGHTER *uus = malloc(sizeof(FIGHTER));
-  strcpy(uus->name, name);
-  strcpy(uus->attack_style, a_style);
-  uus->hp = hp;
-  uus->next = NULL;
-  if(first == NULL)
-    first = last = uus;
-  else
-    add_fighter(uus, first);
-  return uus;
-}
-
 void print_fighter(FIGHTER f) {
   printf("Nimi: \t\t%s\nHyökkäys: \t%s\nHP: \t\t%d\n", f.name, f.attack_style, f.hp);
 }
@@ -97,6 +101,9 @@ void free_all_fighters() {
   }
 }
 
+// commandline
+// struct and a function for printing
+
 struct commandline{
   char command;
   char supplement_1[80];
@@ -108,10 +115,12 @@ void print_commandline(struct commandline cl) {
   printf("Komento: %c\nTieto1: %s\nTieto2: %s\nOikeita: %d\n", cl.command, cl.supplement_1, cl.supplement_2, cl.correct);
 }
 
+// tokenizer and accessories
+
 int has_info(char *string) {
   int i;
   for(i=0; i<160 && string[i] != ' ' && string[i] != '\0' && string[i] != '\n'; i++) {
-    if(isalpha(string[i]) || isdigit(string[i]))
+    if(isalpha(string[i]) || isdigit(string[i]) || string[i] == '?')
       return 1;
   }
   return 0;
@@ -136,7 +145,7 @@ struct commandline tokenize(char *merkkijono) {
   char space[2] = " \0";
   int token_count = 0;
   int read = 0;
-  if(isalpha(merkkijono[0])) {
+  if(isalpha(merkkijono[0]) || merkkijono[0] == '?') {
     token = strcpy(tokens[0], tok(merkkijono, space, &read));
     token_count = 1;
     while(has_info(&(merkkijono[read])) && token_count < 4) {
@@ -173,16 +182,7 @@ struct commandline tokenize(char *merkkijono) {
   return cline;
 }
 
-char * tokens_to_string(struct commandline cmd) {
-  char *returned = malloc(166);
-  returned[0] = cmd.command;
-  returned[1] = ' ';
-  strcpy(&returned[2], cmd.supplement_1);
-  char * space = strchr (&returned[2], (int)'\0');
-  *space = ' ';
-  strcpy(space+1, cmd.supplement_2);
-  return returned;
-}
+// Main has the loop for command line.
 
 int main(void) {
   char merkkijono[160];
@@ -192,23 +192,17 @@ int main(void) {
   struct commandline cline;
   cline.command = 'H';
   while(cline.command != 'Q') {
-    printf("\nAnna komento\n> ");
+    printf("\nAnna komento (AHLDQ?)\n> ");
     fflush(stdout);
     fgets(merkkijono, sizeof(merkkijono), stdin);
     cline = tokenize(merkkijono);
     
     if(cline.correct >= 1 && cline.correct <= 3) {
-      //char* command = tokens_to_string(cline);
       switch(cline.command) {
       case 'A':
         if(cline.correct == 3) {
-          if(DEBUG) print_commandline(cline);
           FIGHTER *fpoint;
-          if(DEBUG) printf("atoi result: %d\n", atoi(cline.supplement_2));
-          fflush(stdout);
           fpoint = new_fighter(cline.supplement_1, "Headbutt", atoi(cline.supplement_2));
-          if(DEBUG) printf("Figher created!\n\n");
-          fflush(stdout);
           printf("Tulostetaan taistelija:\n");
           print_fighter(*fpoint);
         } else {
@@ -216,13 +210,16 @@ int main(void) {
         }
         break;
       case 'H':
-        printf("Valitse joku seuraavista:\nA <nimi> <HP>\tlisää taistelijan\nQ\t\tlopettaa\n");
+      case '?':
+          printf("Valitse joku seuraavista:\nA <nimi> <HP>\tlisää taistelijan\n");
+          printf("L\t\tlistaa taistelijat\nD <nimi>\tpoistaa taistelijan\nQ\t\tlopettaa\nH\t\tnäyttää (tämän) aputiedon\n?\t\tnäyttää (tämän) aputiedon\n");
         break;
       case 'L':
         printf("Tulostetaan taistelijat:\n");
         print_all_fighters();
         break;
       case 'D':
+        if(DEBUG) printf("Giving as remove parameter: %s\n", cline.supplement_1);
         if(remove_fighter(cline.supplement_1))
           printf("Taistelijan poisto onnistui.\n");
         else
@@ -234,7 +231,6 @@ int main(void) {
       default:
         ;
       }
-      //free(command);
     } else {
       printf("Virhe: komento ei ollut järkevän kokoinen (1-3 osaa).\n");
     }
