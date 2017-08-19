@@ -49,24 +49,25 @@ int remove_fighter(char *name){
   int success = 0;
   FIGHTER *current = first;
   FIGHTER *previous = NULL;
-  while(current->next != NULL) {
-    if(!strcmp(current->name, name)) { // I wonder if strcmp works like I want it to
+  while(current->next != NULL) {  // If there's one more item in linked list(, first look at this one)
+    if(!strcmp(current->name, name)) {  // I wonder if strcmp works like I want it to
       success = 1;
-      if(previous == NULL) { first = current->next; free(current); } // Special case, special indentation. Name to be removed matched
-      else { // Name to be removed matched
+      if(previous == NULL) { first = current->next; free(current); }  // Special case, special indentation. Found match and it was the first item in list.
+      else {  // Found a match
         previous->next = current->next;
         free(current);
+        return success;
       }
-    } else { // Name didn't match
+    } else {  // Name didn't match
       previous = current;
       current = current->next;
     }
-  }
-  if(!strcmp(current->name, name)) { // One last time
+  }  // As for the last item
+  if(!strcmp(current->name, name)) {  // Found a match
     success = 1;
-    if(previous == NULL) { first = current->next; free(current); } // Special case, special indentation. Name to be removed matched
-    else { // Name to be removed matched
-      previous->next = current->next;
+    if(previous == NULL) { first = current->next; free(current); }  // Found match and it was the only item in list.
+    else {  // Name to be removed matched
+      if(previous != NULL) previous->next = current->next;
       free(current);
     }
   }
@@ -74,7 +75,8 @@ int remove_fighter(char *name){
 }
 
 void print_fighter(FIGHTER f) {
-  printf("Nimi: \t\t%s\nHyökkäys: \t%s\nHP: \t\t%d\n", f.name, f.attack_style, f.hp);
+  if(DEBUG) printf("Nimi: \t\t'%s'\nHyökkäys: \t%s\nHP: \t\t%d\n", f.name, f.attack_style, f.hp);
+  else printf("Nimi: \t\t%s\nHyökkäys: \t%s\nHP: \t\t%d\n", f.name, f.attack_style, f.hp);
 }
 
 void print_all_fighters() {
@@ -134,8 +136,18 @@ char *tok(char *str, const char *delim, int *read) {
     countedstr++;
   }
   if(DEBUG) printf("Luettu %d merkkiä onnistuneesti (sis. aiemmat välit) %s\n", *read, countedstr_cpy);
-  (*read)++; // for the token separator. Assuming there's only one.
+  (*read)++;  // for the token separator. Assuming there's only one.
   return countedstr_cpy;
+}
+
+char *replace_newlines(char *string) {
+  char *copy = string;
+  while(*string) {
+    if(*string == '\n')
+      *string = '\0';
+    string++;
+  }
+  return copy;
 }
 
 struct commandline tokenize(char *merkkijono) {
@@ -219,7 +231,7 @@ int main(void) {
         print_all_fighters();
         break;
       case 'D':
-        if(DEBUG) printf("Giving as remove parameter: %s\n", cline.supplement_1);
+        if(DEBUG) printf("Giving as remove parameter: '%s'\n", replace_newlines(cline.supplement_1));
         if(remove_fighter(cline.supplement_1))
           printf("Taistelijan poisto onnistui.\n");
         else
