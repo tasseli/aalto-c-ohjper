@@ -6,7 +6,7 @@
 // Mikael Nenonen k90390
 // 2017-08-17 16:00
 
-int DEBUG = 1;
+int DEBUG = 0;
 
 // FIGHTER
 // struct and a linked list, accessible by *first and *last item.
