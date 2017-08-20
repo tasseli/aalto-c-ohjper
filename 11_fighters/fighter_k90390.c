@@ -8,6 +8,98 @@
 
 int DEBUG = 0;
 
+// ATTACK
+// struct and a linked list, accessible by *first and *last item.
+
+#define ATTACK struct attack
+struct attack{
+  char name[80];
+  int damage;
+  ATTACK *next;
+};
+
+ATTACK *first_a = NULL;
+ATTACK *last_a = NULL;
+
+int add_attack(ATTACK *added, ATTACK *member) {
+  while(member->next != NULL && member != last_a) {
+    member = member->next;
+  }
+  member->next = added;
+  last_a = added;
+  return 1;
+}
+
+ATTACK *new_attack(char *name, int damage) {
+  ATTACK *uus = malloc(sizeof(ATTACK));
+  strcpy(uus->name, name);
+  uus->damage = damage;
+  uus->next = NULL;
+  if(first_a == NULL)
+    first_a = last_a = uus;
+  else
+    add_attack(uus, first_a);
+  return uus;
+}
+
+int remove_attack(char *name){
+  int success = 0;
+  ATTACK *current = first_a;
+  ATTACK *previous = NULL;
+  while(current->next != NULL) {  // If there's one more item in linked list(, first look at this one)
+    if(!strcmp(current->name, name)) {  // I wonder if strcmp works like I want it to
+      success = 1;
+      if(previous == NULL) { first_a = current->next; free(current); }  // Special case, special indentation. Found match and it was the first item in list.
+      else {  // Found a match
+        previous->next = current->next;
+        free(current);
+        return success;
+      }
+    } else {  // Name didn't match
+      previous = current;
+      current = current->next;
+    }
+  }  // As for the last item
+  if(!strcmp(current->name, name)) {  // Found a match
+    success = 1;
+    if(previous == NULL) { first_a = current->next; free(current); }  // Found match and it was the only item in list.
+    else {  // Name to be removed matched
+      if(previous != NULL) previous->next = current->next;
+      free(current);
+    }
+  }
+  return success;
+}
+
+void print_attack(ATTACK a) {
+  printf("Hyökkäys: \t%s\ndamage: \t\t%d\n", a.name, a.damage);
+}
+
+void print_all_attacks() {
+  ATTACK *current = first_a;
+  if(current) {
+    while(current->next) {
+      print_attack(*current);
+      current = current->next;
+    }
+    print_attack(*current);
+  }
+}
+
+void free_all_attacks() {
+  ATTACK *current = first_a;
+  ATTACK *freed;
+  if(current) {
+    while(current->next) {
+      freed = current;
+      current = current->next;
+      free(freed);
+    }
+    free(current);
+  }
+  first_a = last_a = NULL;
+}
+
 // FIGHTER
 // struct and a linked list, accessible by *first and *last item.
 // Also functions for creating, adding (to list), removing (18.8. under construction), printing, printing all, and freeing all fighters.
@@ -220,6 +312,20 @@ int main(void) {
           print_fighter(*fpoint);
         } else {
           printf("(A)dding tarvitsee kolme osaa; komennon A, nimen, ja HP:t.\n");
+        }
+        break;
+      case 'B':
+        if(cline.correct == 3) {
+          ATTACK *apoint;
+          apoint = new_attack(cline.supplement_1, atoi(cline.supplement_2));
+          printf("Tulostetaan hyökkäys:\n");
+          print_attack(*apoint);
+        } else if (cline.correct == 1) {
+          printf("Tulostetaan kaikki hyökkäykset:\n");
+          print_all_attacks();
+        }
+        else {
+          printf("(B) tarvitsee tasan yhden tai kolme osaa; komennon B, nimen, ja damagen.\n");
         }
         break;
       case 'H':
