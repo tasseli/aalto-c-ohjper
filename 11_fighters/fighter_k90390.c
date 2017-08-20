@@ -101,6 +101,7 @@ void free_all_fighters() {
     }
     free(current);
   }
+  first = last = NULL;
 }
 
 // commandline
@@ -223,8 +224,8 @@ int main(void) {
         break;
       case 'H':
       case '?':
-          printf("Valitse joku seuraavista:\nA <nimi> <HP>\tlisää taistelijan\n");
-          printf("L\t\tlistaa taistelijat\nD <nimi>\tpoistaa taistelijan\nQ\t\tlopettaa\nH\t\tnäyttää (tämän) aputiedon\n?\t\tnäyttää (tämän) aputiedon\n");
+          printf("Valitse joku seuraavista:\nA <nimi> <HP>\tlisää taistelijan\nL\t\tlistaa taistelijat\n");
+          printf("D <nimi>\tpoistaa taistelijan\nD -A\t\tpoistaa kaikki taistelijat\nH\t\tnäyttää (tämän) aputiedon\n?\t\tnäyttää (tämän) aputiedon\nQ\t\tlopettaa\n");
         break;
       case 'L':
         printf("Tulostetaan taistelijat:\n");
@@ -233,7 +234,7 @@ int main(void) {
       case 'D':
         strcpy(cline.supplement_1, replace_newlines(cline.supplement_1));
         if(DEBUG) printf("Annetaan poista-parametrina: '%s'\n", cline.supplement_1);
-        if(cline.supplement_1[0] == '-' && toupper(cline.supplement_1[0]) == 'A') {
+        if(cline.supplement_1[0] == '-' && toupper(cline.supplement_1[1]) == 'A') {
           free_all_fighters();
           printf("Poistettu kaikki taistelijat!\n");
         } else {
