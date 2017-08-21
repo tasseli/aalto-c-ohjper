@@ -72,7 +72,7 @@ int remove_attack(char *name){
 }
 
 void print_attack(ATTACK a) {
-  printf("Hyökkäys: \t%s\ndamage: \t\t%d\n", a.name, a.damage);
+  printf("Hyökkäys: \t%s\nVahinko: \t%d\n", a.name, a.damage);
 }
 
 void print_all_attacks() {
@@ -100,6 +100,50 @@ void free_all_attacks() {
   first_a = last_a = NULL;
 }
 
+void add_my_attacks() {
+  ATTACK *apoint;
+  apoint = new_attack("Growl", 1);
+  apoint = new_attack("Shriek", 1);
+  apoint = new_attack("Bite", 2);
+  apoint = new_attack("Curse", 2);
+  apoint = new_attack("Emasculate", 2);
+  apoint = new_attack("Punch", 3);
+  apoint = new_attack("Crush", 3);
+  apoint = new_attack("Headbutt", 4);
+  apoint = new_attack("Kick", 5);
+  apoint = new_attack("Stomp", 8);
+  apoint = new_attack("Firepunch", 10);
+  apoint = new_attack("Powerthrow", 12);
+  apoint = new_attack("Defenestrate", 15);
+  //apoint = new_attack("Decimate", n/10);
+  apoint = new_attack("Deorbit", 35);
+  apoint = new_attack("Decapitate", 55);
+}
+
+ /*
+ Ideas for attack styles:
+ - Harmful wish     1
+ - Guilt trip       1
+ - Growl            1
+ - Shriek           1
+ - Bite             2
+ - Curse            2
+ - Emasculate       2
+ - Punch            3
+ - Crush            3
+ - Headbutt         4
+ - Kick             5
+ - Poison bite      7
+ - Roundhouse kick  7
+ - Stomp            8
+ - Fire punch       10
+ - Power throw      12
+ - Defenestrate     15
+ - Deorbit          35
+ - Decimate         n*9/10
+ - Decapitate       55
+ */
+ 
 // FIGHTER
 // struct and a linked list, accessible by *first and *last item.
 // Also functions for creating, adding (to list), removing (18.8. under construction), printing, printing all, and freeing all fighters.
@@ -290,6 +334,7 @@ struct commandline tokenize(char *merkkijono) {
 // Main has the loop for command line.
 
 int main(void) {
+  add_my_attacks();
   char merkkijono[160];
   memset(merkkijono, '\0', sizeof(merkkijono));
   printf("Tervetuloa taistelupeliin (vaiheessa)!\n");
@@ -363,28 +408,4 @@ int main(void) {
   free_all_fighters();
   return 0;
 }
- 
- /*
- Ideas for attack styles:
- - Harmful wish     1
- - Guilt trip       1
- - Growl            1
- - Shriek           1
- - Bite             2
- - Curse            2
- - Emasculate       2
- - Punch            3
- - Crush            3
- - Headbutt         4
- - Kick             5
- - Poison bite      7
- - Roundhouse kick  7
- - Stomp            8
- - Fire punch       10
- - Power throw      12
- - Defenestrate     15
- - Deorbit          35
- - Decimate         n*9/10
- - Decapitate       55
- */
  
