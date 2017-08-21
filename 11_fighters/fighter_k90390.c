@@ -368,9 +368,12 @@ int main(void) {
         break;
       case 'B':
         if(cline.correct == 3) {
-          assign_attack(cline.supplement_1, replace_newlines(cline.supplement_2));
-          printf("Tulostetaan taistelija:\n");
-          print_fighter(*find_fighter(cline.supplement_1));
+          if(assign_attack(cline.supplement_1, replace_newlines(cline.supplement_2))) {
+            printf("Hyökkäystapa päivitetty.\n");
+            printf("Tulostetaan taistelija:\n");
+            print_fighter(*find_fighter(cline.supplement_1));
+          } else
+            printf("Hyökkäystavan päivitys ei onnistunut!\nTarkista taistelijan / hyökkäyksen nimi.\n");
         } else if (cline.correct == 1) {
           printf("Tulostetaan kaikki hyökkäykset:\n");
           print_all_attacks();
