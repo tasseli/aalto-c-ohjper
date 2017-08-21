@@ -12,6 +12,50 @@ int DEBUG = 0;
 #define FIGHTER struct fighter
 #define ATTACK struct attack
 
+// String handling
+
+char *join_strs(int count, ...) {
+  va_list ap;
+  va_start(ap, count);
+  char *next_string;
+  char *so_far = NULL;
+  int i;
+  for(i=0; i<count; i++) {
+    next_string = va_arg (ap, char*);
+    if(DEBUG) printf("Read next string, and it's: '%s'\n", next_string);
+    if(DEBUG) printf("The string so_far is: '%s'\n", so_far);
+    if(!so_far) {
+      so_far = realloc(so_far, 80*sizeof(char));
+      strcpy(so_far, next_string);
+    } else {
+      so_far = realloc(so_far, (i+1)*80*sizeof(char));
+      strcat(so_far, next_string);
+    }
+    if(DEBUG) printf("Combined: '%s'\n", so_far);  
+  }
+  va_end(ap);
+  return so_far;
+}
+
+int has_info(char *string) {
+  int i;
+  for(i=0; i<160 && string[i] != ' ' && string[i] != '\0' && string[i] != '\n'; i++) {
+    if(isalpha(string[i]) || isdigit(string[i]) || string[i] == '?' || string[i] == '-')
+      return 1;
+  }
+  return 0;
+}
+
+char *replace_newlines(char *string) {
+  char *copy = string;
+  while(*string) {
+    if(*string == '\n')
+      *string = '\0';
+    string++;
+  }
+  return copy;
+}
+
 // FIGHTER
 // struct and a linked list, accessible by *first and *last item.
 // Also functions for creating, adding (to list), removing (18.8. under construction), printing, printing all, and freeing all fighters.
@@ -119,50 +163,25 @@ FIGHTER *find_fighter(char *name) {
   return NULL;
 }
 
-char *join_strs(int count, ...) {
-  va_list ap;
-  va_start(ap, count);
-  char *next_string;
-  char *so_far = NULL;
-  int i;
-  for(i=0; i<count; i++) {
-    next_string = va_arg (ap, char*);
-    if(DEBUG) printf("Read next string, and it's: '%s'\n", next_string);
-    if(DEBUG) printf("The string so_far is: '%s'\n", so_far);
-    if(!so_far) {
-      so_far = realloc(so_far, 80*sizeof(char));
-      strcpy(so_far, next_string);
-    } else {
-      so_far = realloc(so_far, (i+1)*80*sizeof(char));
-      strcat(so_far, next_string);
-    }
-    if(DEBUG) printf("Combined: '%s'\n", so_far);  
-  }
-  va_end(ap);
-  return so_far;
-}
-
 int write_fighter(FIGHTER *f, FILE *file) {
   char hp[80];
-  //char *info = strcat(f->name, strcat(f->attack_style, itoa(f->hp, hp, 10)));
-  //printf("I'd write: '%s'\n", info);
-  //printf("Using my new join_strs next!\n");
-  //fflush(stdout);
-  char *result = join_strs(7, "[ ", f->name, " , ", f->attack_style, " , ", itoa(f->hp, hp, 10), " ]\n");
-  printf("%s", result);
+  char *result = join_strs(7, "  [ ", f->name, " , ", f->attack_style, " , ", itoa(f->hp, hp, 10), " ]\n");
+  fprintf(file, "%s", result);
   free(result);
   return 1;
 }
 
-void write_all_fighters() {
+void write_all_fighters(FILE *file) {
+  fprintf(file, "fighters:\n[\n");
   FIGHTER *current = first;
   if(current) {
     while(current->next) {
-      write_fighter(current, stdout);
+      write_fighter(current, file);
       current = current->next;
     }
-    write_fighter(current, stdout);
+    write_fighter(current, file);
   }
+  fprintf(file, "]\n");
 }
 
 // ATTACK
@@ -331,16 +350,7 @@ void print_commandline(struct commandline cl) {
   printf("Komento: %c\nTieto1: %s\nTieto2: %s\nOikeita: %d\n", cl.command, cl.supplement_1, cl.supplement_2, cl.correct);
 }
 
-// tokenizer and accessories
-
-int has_info(char *string) {
-  int i;
-  for(i=0; i<160 && string[i] != ' ' && string[i] != '\0' && string[i] != '\n'; i++) {
-    if(isalpha(string[i]) || isdigit(string[i]) || string[i] == '?' || string[i] == '-')
-      return 1;
-  }
-  return 0;
-}
+// Tokenizer
 
 char *tok(char *str, const char *delim, int *read) {
   char *countedstr = strtok(str, delim);
@@ -352,16 +362,6 @@ char *tok(char *str, const char *delim, int *read) {
   if(DEBUG) printf("Luettu %d merkkiä onnistuneesti (sis. aiemmat välit) %s\n", *read, countedstr_cpy);
   (*read)++;  // for the token separator. Assuming there's only one.
   return countedstr_cpy;
-}
-
-char *replace_newlines(char *string) {
-  char *copy = string;
-  while(*string) {
-    if(*string == '\n')
-      *string = '\0';
-    string++;
-  }
-  return copy;
 }
 
 struct commandline tokenize(char *merkkijono) {
@@ -483,7 +483,7 @@ int main(void) {
         if(cline.correct == 2)
           write_fighter(find_fighter(replace_newlines(cline.supplement_1)), stdout);
         else if(cline.correct == 1)
-          write_all_fighters();
+          write_all_fighters(stdout);
         break;
       case 'Q':
         printf("\nKiitos pelistä.\n");
