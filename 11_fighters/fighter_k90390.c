@@ -125,8 +125,8 @@ char *join_strs(int count, ...) {
   int i;
   for(i=0; i<count; i++) {
     next_string = va_arg (ap, char*);
-    printf("Read next string, and it's: '%s'\n", next_string);
-    printf("The string so_far is: '%s'\n", so_far);
+    if(DEBUG) printf("Read next string, and it's: '%s'\n", next_string);
+    if(DEBUG) printf("The string so_far is: '%s'\n", so_far);
     if(!so_far) {
       so_far = realloc(so_far, 80*sizeof(char));
       strcpy(so_far, next_string);
@@ -134,7 +134,7 @@ char *join_strs(int count, ...) {
       so_far = realloc(so_far, (i+1)*80*sizeof(char));
       strcat(so_far, next_string);
     }
-    printf("Combined: '%s'\n", so_far);  
+    if(DEBUG) printf("Combined: '%s'\n", so_far);  
   }
   va_end(ap);
   return so_far;
@@ -142,12 +142,12 @@ char *join_strs(int count, ...) {
 
 int write_fighter(FIGHTER *f, FILE *file) {
   char hp[80];
-  char *info = strcat(f->name, strcat(f->attack_style, itoa(f->hp, hp, 10)));
-  printf("I'd write: '%s'\n", info);
-  printf("Using my new join_strs next!\n");
-  fflush(stdout);
-  char *result = join_strs(2, "Kookospahkinoitatassameillaontiidudiidu", "laitariviinkaikkipahkinat");
-  printf("%s\n", result);
+  //char *info = strcat(f->name, strcat(f->attack_style, itoa(f->hp, hp, 10)));
+  //printf("I'd write: '%s'\n", info);
+  //printf("Using my new join_strs next!\n");
+  //fflush(stdout);
+  char *result = join_strs(7, "[ ", f->name, " , ", f->attack_style, " , ", itoa(f->hp, hp, 10), " ]\n");
+  printf("%s", result);
   free(result);
   return 1;
 }
