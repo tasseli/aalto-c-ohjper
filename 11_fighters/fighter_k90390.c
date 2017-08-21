@@ -8,10 +8,118 @@
 
 int DEBUG = 0;
 
+#define ATTACK struct attack
+#define FIGHTER struct fighter
+struct fighter;
+FIGHTER *find_fighter(char *);
+
+// FIGHTER
+// struct and a linked list, accessible by *first and *last item.
+// Also functions for creating, adding (to list), removing (18.8. under construction), printing, printing all, and freeing all fighters.
+
+struct fighter{
+  char name[80];
+  char attack_style[32];
+  int hp;
+  FIGHTER *next;
+};
+
+FIGHTER *first = NULL;
+FIGHTER *last = NULL;
+
+int add_fighter(FIGHTER *added, FIGHTER *member) {
+  while(member->next != NULL && member != last) {
+    member = member->next;
+  }
+  member->next = added;
+  last = added;
+  return 1;
+}
+
+FIGHTER *new_fighter(char *name, char *a_style, int hp) {
+  FIGHTER *uus = malloc(sizeof(FIGHTER));
+  strcpy(uus->name, name);
+  strcpy(uus->attack_style, a_style);
+  uus->hp = hp;
+  uus->next = NULL;
+  if(first == NULL)
+    first = last = uus;
+  else
+    add_fighter(uus, first);
+  return uus;
+}
+
+int remove_fighter(char *name){
+  int success = 0;
+  FIGHTER *current = first;
+  FIGHTER *previous = NULL;
+  while(current->next != NULL) {  // If there's one more item in linked list(, first look at this one)
+    if(!strcmp(current->name, name)) {  // I wonder if strcmp works like I want it to
+      success = 1;
+      if(previous == NULL) { first = current->next; free(current); }  // Special case, special indentation. Found match and it was the first item in list.
+      else {  // Found a match
+        previous->next = current->next;
+        free(current);
+        return success;
+      }
+    } else {  // Name didn't match
+      previous = current;
+      current = current->next;
+    }
+  }  // As for the last item
+  if(!strcmp(current->name, name)) {  // Found a match
+    success = 1;
+    if(previous == NULL) { first = current->next; free(current); }  // Found match and it was the only item in list.
+    else {  // Name to be removed matched
+      if(previous != NULL) previous->next = current->next;
+      free(current);
+    }
+  }
+  return success;
+}
+
+void print_fighter(FIGHTER f) {
+  if(DEBUG) printf("Nimi: \t\t'%s'\nHyökkäys: \t%s\nHP: \t\t%d\n", f.name, f.attack_style, f.hp);
+  else printf("Nimi: \t\t%s\nHyökkäys: \t%s\nHP: \t\t%d\n", f.name, f.attack_style, f.hp);
+}
+
+void print_all_fighters() {
+  FIGHTER *current = first;
+  if(current) {
+    while(current->next) {
+      print_fighter(*current);
+      current = current->next;
+    }
+    print_fighter(*current);
+  }
+}
+
+void free_all_fighters() {
+  FIGHTER *current = first;
+  FIGHTER *freed;
+  if(current) {
+    while(current->next) {
+      freed = current;
+      current = current->next;
+      free(freed);
+    }
+    free(current);
+  }
+  first = last = NULL;
+}
+
+FIGHTER *find_fighter(char *name) {
+  FIGHTER *current = first;
+  while(current) {
+    if(strcmp(current->name, name))
+      return current;
+  }
+  return NULL;
+}
+
 // ATTACK
 // struct and a linked list, accessible by *first and *last item.
 
-#define ATTACK struct attack
 struct attack{
   char name[80];
   int damage;
@@ -120,100 +228,22 @@ void add_my_attacks() {
   apoint = new_attack("Decapitate", 55);
 }
 
-// FIGHTER
-// struct and a linked list, accessible by *first and *last item.
-// Also functions for creating, adding (to list), removing (18.8. under construction), printing, printing all, and freeing all fighters.
-
-#define FIGHTER struct fighter
-struct fighter{
-  char name[80];
-  char attack_style[32];
-  int hp;
-  FIGHTER *next;
-};
-
-FIGHTER *first = NULL;
-FIGHTER *last = NULL;
-
-int add_fighter(FIGHTER *added, FIGHTER *member) {
-  while(member->next != NULL && member != last) {
-    member = member->next;
+ATTACK *find_attack(char *name) {
+  ATTACK *current = first_a;
+  while(current) {
+    if(strcmp(current->name, name))
+      return current;
   }
-  member->next = added;
-  last = added;
-  return 1;
+  return NULL;
 }
 
-FIGHTER *new_fighter(char *name, char *a_style, int hp) {
-  FIGHTER *uus = malloc(sizeof(FIGHTER));
-  strcpy(uus->name, name);
-  strcpy(uus->attack_style, a_style);
-  uus->hp = hp;
-  uus->next = NULL;
-  if(first == NULL)
-    first = last = uus;
-  else
-    add_fighter(uus, first);
-  return uus;
-}
-
-int remove_fighter(char *name){
-  int success = 0;
-  FIGHTER *current = first;
-  FIGHTER *previous = NULL;
-  while(current->next != NULL) {  // If there's one more item in linked list(, first look at this one)
-    if(!strcmp(current->name, name)) {  // I wonder if strcmp works like I want it to
-      success = 1;
-      if(previous == NULL) { first = current->next; free(current); }  // Special case, special indentation. Found match and it was the first item in list.
-      else {  // Found a match
-        previous->next = current->next;
-        free(current);
-        return success;
-      }
-    } else {  // Name didn't match
-      previous = current;
-      current = current->next;
-    }
-  }  // As for the last item
-  if(!strcmp(current->name, name)) {  // Found a match
-    success = 1;
-    if(previous == NULL) { first = current->next; free(current); }  // Found match and it was the only item in list.
-    else {  // Name to be removed matched
-      if(previous != NULL) previous->next = current->next;
-      free(current);
-    }
+int assign_attack(char *name_fighter, char *name_attack) {
+  if(find_attack(name_attack)) {
+    FIGHTER *current = find_fighter(name_fighter);
+    strcpy(current->attack_style, name_attack);
+    return 1;
   }
-  return success;
-}
-
-void print_fighter(FIGHTER f) {
-  if(DEBUG) printf("Nimi: \t\t'%s'\nHyökkäys: \t%s\nHP: \t\t%d\n", f.name, f.attack_style, f.hp);
-  else printf("Nimi: \t\t%s\nHyökkäys: \t%s\nHP: \t\t%d\n", f.name, f.attack_style, f.hp);
-}
-
-void print_all_fighters() {
-  FIGHTER *current = first;
-  if(current) {
-    while(current->next) {
-      print_fighter(*current);
-      current = current->next;
-    }
-    print_fighter(*current);
-  }
-}
-
-void free_all_fighters() {
-  FIGHTER *current = first;
-  FIGHTER *freed;
-  if(current) {
-    while(current->next) {
-      freed = current;
-      current = current->next;
-      free(freed);
-    }
-    free(current);
-  }
-  first = last = NULL;
+  return 0;
 }
 
 // commandline
