@@ -539,7 +539,7 @@ int main(void) {
           FILE *readfile;
           readfile = fopen("test.txt", "r");
           if(readfile) read_all_fighters(readfile);
-          fclose(writefile);
+          fclose(readfile);
         }
         break;
       case 'Q':
