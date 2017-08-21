@@ -108,11 +108,13 @@ void free_all_fighters() {
 }
 
 FIGHTER *find_fighter(char *name) {
-  FIGHTER *current = first;
-  while(current) {
-    if(!strcmp(current->name, name))
-      return current;
-    current = current->next;
+  if(name) {
+    FIGHTER *current = first;
+    while(current) {
+      if(!strcmp(current->name, name))
+        return current;
+      current = current->next;
+    }
   }
   return NULL;
 }
@@ -150,6 +152,17 @@ int write_fighter(FIGHTER *f, FILE *file) {
   printf("%s", result);
   free(result);
   return 1;
+}
+
+void write_all_fighters() {
+  FIGHTER *current = first;
+  if(current) {
+    while(current->next) {
+      write_fighter(current, stdout);
+      current = current->next;
+    }
+    write_fighter(current, stdout);
+  }
 }
 
 // ATTACK
@@ -265,11 +278,13 @@ void add_my_attacks() {
 }
 
 ATTACK *find_attack(char *name) {
-  ATTACK *current = first_a;
-  while(current) {
-    if(!strcmp(current->name, name))
-      return current;
-    current = current->next;
+  if(name) {
+    ATTACK *current = first_a;
+    while(current) {
+      if(!strcmp(current->name, name))
+        return current;
+      current = current->next;
+    }
   }
   return NULL;
 }
@@ -467,6 +482,8 @@ int main(void) {
       case 'W':
         if(cline.correct == 2)
           write_fighter(find_fighter(replace_newlines(cline.supplement_1)), stdout);
+        else if(cline.correct == 1)
+          write_all_fighters();
         break;
       case 'Q':
         printf("\nKiitos pelistä.\n");
