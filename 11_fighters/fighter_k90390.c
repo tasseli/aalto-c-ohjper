@@ -47,7 +47,7 @@ int remove_attack(char *name){
   ATTACK *current = first_a;
   ATTACK *previous = NULL;
   while(current->next != NULL) {  // If there's one more item in linked list(, first look at this one)
-    if(!strcmp(current->name, name)) {  // I wonder if strcmp works like I want it to
+    if(!strcmp(current->name, name)) {
       success = 1;
       if(previous == NULL) { first_a = current->next; free(current); }  // Special case, special indentation. Found match and it was the first item in list.
       else {  // Found a match
@@ -120,30 +120,6 @@ void add_my_attacks() {
   apoint = new_attack("Decapitate", 55);
 }
 
- /*
- Ideas for attack styles:
- - Harmful wish     1
- - Guilt trip       1
- - Growl            1
- - Shriek           1
- - Bite             2
- - Curse            2
- - Emasculate       2
- - Punch            3
- - Crush            3
- - Headbutt         4
- - Kick             5
- - Poison bite      7
- - Roundhouse kick  7
- - Stomp            8
- - Fire punch       10
- - Power throw      12
- - Defenestrate     15
- - Deorbit          35
- - Decimate         n*9/10
- - Decapitate       55
- */
- 
 // FIGHTER
 // struct and a linked list, accessible by *first and *last item.
 // Also functions for creating, adding (to list), removing (18.8. under construction), printing, printing all, and freeing all fighters.
