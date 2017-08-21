@@ -116,6 +116,17 @@ FIGHTER *find_fighter(char *name) {
   return NULL;
 }
 
+char *jstr(char *str1, char *str2) {
+  
+}
+
+int write_fighter(FIGHTER *f, FILE *file) {
+  char hp[80];
+  char *info = strcat(f->name, strcat(f->attack_style, itoa(f->hp, hp, 10)));
+  printf("I'd write: '%s'\n", info);
+  return 1;
+}
+
 // ATTACK
 // struct and a linked list, accessible by *first and *last item.
 
@@ -427,6 +438,10 @@ int main(void) {
           else
             printf("Virhe: Taistelijan poisto epäonnistui!\n");
         }
+        break;
+      case 'W':
+        if(cline.correct == 2)
+          write_fighter(find_fighter(replace_newlines(cline.supplement_1)), stdout);
         break;
       case 'Q':
         printf("\nKiitos pelistä.\n");
