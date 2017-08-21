@@ -11,7 +11,6 @@ int DEBUG = 0;
 #define ATTACK struct attack
 #define FIGHTER struct fighter
 struct fighter;
-FIGHTER *find_fighter(char *);
 
 // FIGHTER
 // struct and a linked list, accessible by *first and *last item.
@@ -111,8 +110,9 @@ void free_all_fighters() {
 FIGHTER *find_fighter(char *name) {
   FIGHTER *current = first;
   while(current) {
-    if(strcmp(current->name, name))
+    if(!strcmp(current->name, name))
       return current;
+    current = current->next;
   }
   return NULL;
 }
@@ -231,8 +231,9 @@ void add_my_attacks() {
 ATTACK *find_attack(char *name) {
   ATTACK *current = first_a;
   while(current) {
-    if(strcmp(current->name, name))
+    if(!strcmp(current->name, name))
       return current;
+    current = current->next;
   }
   return NULL;
 }
@@ -367,10 +368,9 @@ int main(void) {
         break;
       case 'B':
         if(cline.correct == 3) {
-          ATTACK *apoint;
-          apoint = new_attack(cline.supplement_1, atoi(cline.supplement_2));
-          printf("Tulostetaan hyökkäys:\n");
-          print_attack(*apoint);
+          assign_attack(cline.supplement_1, replace_newlines(cline.supplement_2));
+          printf("Tulostetaan taistelija:\n");
+          print_fighter(*find_fighter(cline.supplement_1));
         } else if (cline.correct == 1) {
           printf("Tulostetaan kaikki hyökkäykset:\n");
           print_all_attacks();
