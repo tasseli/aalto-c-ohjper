@@ -165,7 +165,7 @@ FIGHTER *find_fighter(char *name) {
 
 int write_fighter(FIGHTER *f, FILE *file) {
   char hp[80];
-  char *result = join_strs(7, "  [ ", f->name, " , ", f->attack_style, " , ", itoa(f->hp, hp, 10), " ]\n");
+  char *result = join_strs(7, "  [ ", f->name, " , ", f->attack_style, " , ", sprintf(hp, "%d",f->hp), " ]\n");
   fprintf(file, "%s", result);
   free(result);
   return 1;
@@ -318,7 +318,7 @@ ATTACK *find_attack(char *name) {
 
 int write_attack(ATTACK *a, FILE *file) {  // Unused in main-loop, so far.
   char damage[80];
-  char *result = join_strs(5, "  [ ", a->name, " , ", itoa(a->damage, damage, 10), " ]\n");
+  char *result = join_strs(5, "  [ ", a->name, " , ", sprintf(damage, "%d",a->damage), " ]\n");
   fprintf(file, "%s", result);
   free(result);
   return 1;
