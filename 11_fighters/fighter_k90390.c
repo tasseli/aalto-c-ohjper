@@ -308,6 +308,27 @@ ATTACK *find_attack(char *name) {
   return NULL;
 }
 
+int write_attack(ATTACK *a, FILE *file) {  // Unused in main-loop, so far.
+  char damage[80];
+  char *result = join_strs(5, "  [ ", a->name, " , ", itoa(a->damage, damage, 10), " ]\n");
+  fprintf(file, "%s", result);
+  free(result);
+  return 1;
+}
+
+void write_all_attacks(FILE *file) {  // Unused in main-loop, so far.
+  fprintf(file, "attacks:\n[\n");
+  ATTACK *current = first_a;
+  if(current) {
+    while(current->next) {
+      write_attack(current, file);
+      current = current->next;
+    }
+    write_attack(current, file);
+  }
+  fprintf(file, "]\n");
+}
+
 int assign_attack(char *name_fighter, char *name_attack) {
   if(find_attack(name_attack)) {
     FIGHTER *current = find_fighter(name_fighter);
