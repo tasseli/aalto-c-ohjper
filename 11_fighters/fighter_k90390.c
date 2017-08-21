@@ -249,7 +249,9 @@ int assign_attack(char *name_fighter, char *name_attack) {
 
 char *describe(int hp, int damage) {
   if(damage >= hp) return "SE OLI SIINÄ!";
-  return "hän ei nauti.";
+  else if(damage >= 0.5*hp) return "Tuo todella tuntui!";
+  else if(damage >= 0.25*hp) return "Pintanaarmu.";
+  return "hän ei pitänyt tästä.";
 }
 
 int attack(FIGHTER *attacker, FIGHTER *defender) {
@@ -406,7 +408,7 @@ int main(void) {
         break;
       case 'F':
         if(cline.correct == 3) {
-          printf("Vahinkoa syntyy %d\n", attack(find_fighter(cline.supplement_1), find_fighter(replace_newlines(cline.supplement_2))));
+          attack(find_fighter(cline.supplement_1), find_fighter(replace_newlines(cline.supplement_2)));
         }
         break;
       case 'L':
