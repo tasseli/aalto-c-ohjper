@@ -503,8 +503,12 @@ int main(void) {
       case 'W':
         if(cline.correct == 2)
           write_fighter(find_fighter(replace_newlines(cline.supplement_1)), stdout);
-        else if(cline.correct == 1)
-          write_all_fighters(stdout);
+        else if(cline.correct == 1) {
+          FILE *writefile;
+          writefile = fopen("test.txt", "w");
+          if(writefile) write_all_fighters(writefile);
+          fclose(writefile);
+        }
         break;
       case 'Q':
         printf("\nKiitos pelistä.\n");
