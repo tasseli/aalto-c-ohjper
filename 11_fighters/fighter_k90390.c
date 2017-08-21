@@ -185,6 +185,11 @@ void write_all_fighters(FILE *file) {
   printf("Kirjoitettu.\n");
 }
 
+void read_all_fighters(FILE *file) {
+  FIGHTER current;
+  
+}
+
 // ATTACK
 // struct and a linked list, accessible by *first and *last item.
 
@@ -508,8 +513,8 @@ int main(void) {
           char *filename = malloc(280*sizeof(char));
           strcpy(filename, replace_newlines(cline.supplement_1));
           FILE *writefile;
-          writefile = fopen(filename, "w+");
-          write_all_fighters(writefile);
+          writefile = fopen(filename, "w");
+          if(writefile) write_all_fighters(writefile);
           fclose(writefile);
           free(filename);
         }
@@ -519,7 +524,23 @@ int main(void) {
           if(writefile) write_all_fighters(writefile);
           fclose(writefile);
         }
-        
+        break;
+      case 'O':
+        if(cline.correct == 2) {
+          char *filename = malloc(280*sizeof(char));
+          strcpy(filename, replace_newlines(cline.supplement_1));
+          FILE *readfile;
+          readfile = fopen(filename, "r");
+          if(readfile) read_all_fighters(readfile);
+          fclose(readfile);
+          free(filename);
+        }
+        else if(cline.correct == 1) {
+          FILE *readfile;
+          readfile = fopen("test.txt", "r");
+          if(readfile) read_all_fighters(readfile);
+          fclose(writefile);
+        }
         break;
       case 'Q':
         printf("\nKiitos pelistä.\n");
