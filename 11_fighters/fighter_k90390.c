@@ -182,6 +182,7 @@ void write_all_fighters(FILE *file) {
     write_fighter(current, file);
   }
   fprintf(file, "]\n");
+  printf("Kirjoitettu.\n");
 }
 
 // ATTACK
@@ -285,9 +286,11 @@ void add_my_attacks() {
   apoint = new_attack("Emasculate", 2);
   apoint = new_attack("Punch", 3);
   apoint = new_attack("Crush", 3);
+  apoint = new_attack("Claw", 3);
   apoint = new_attack("Headbutt", 4);
   apoint = new_attack("Kick", 5);
   apoint = new_attack("Stomp", 8);
+  apoint = new_attack("Fireblow", 9);
   apoint = new_attack("Firepunch", 10);
   apoint = new_attack("Powerthrow", 12);
   apoint = new_attack("Defenestrate", 15);
@@ -501,14 +504,22 @@ int main(void) {
         }
         break;
       case 'W':
-        if(cline.correct == 2)
-          write_fighter(find_fighter(replace_newlines(cline.supplement_1)), stdout);
+        if(cline.correct == 2) {
+          char *filename = malloc(280*sizeof(char));
+          strcpy(filename, replace_newlines(cline.supplement_1));
+          FILE *writefile;
+          writefile = fopen(filename, "w+");
+          write_all_fighters(writefile);
+          fclose(writefile);
+          free(filename);
+        }
         else if(cline.correct == 1) {
           FILE *writefile;
-          writefile = fopen("test.txt", "w");
+          writefile = fopen("test.txt", "w+");
           if(writefile) write_all_fighters(writefile);
           fclose(writefile);
         }
+        
         break;
       case 'Q':
         printf("\nKiitos pelistä.\n");
