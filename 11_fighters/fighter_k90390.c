@@ -8,9 +8,8 @@
 
 int DEBUG = 0;
 
-#define ATTACK struct attack
 #define FIGHTER struct fighter
-struct fighter;
+#define ATTACK struct attack
 
 // FIGHTER
 // struct and a linked list, accessible by *first and *last item.
@@ -211,6 +210,7 @@ void free_all_attacks() {
 void add_my_attacks() {
   ATTACK *apoint;
   apoint = new_attack("Growl", 1);
+  apoint = new_attack("Dragonblade", 1);  // I want my 1 point!
   apoint = new_attack("Shriek", 1);
   apoint = new_attack("Bite", 2);
   apoint = new_attack("Curse", 2);
@@ -245,6 +245,23 @@ int assign_attack(char *name_fighter, char *name_attack) {
     return 1;
   }
   return 0;
+}
+
+char *describe(int hp, int damage) {
+  if(damage >= hp) return "SE OLI SIINÄ!";
+  return "hän ei nauti.";
+}
+
+int attack(FIGHTER *attacker, FIGHTER *defender) {
+  printf("%s on vuosien saatossa hionut huippuunsa salatun taitonsa: %s.\n", attacker->name, attacker->attack_style);
+  printf("Hän hyökkää, kohteenaan %s!\n", defender->name);
+  int damage = find_attack(attacker->attack_style)->damage;
+  printf("Isku aiheuttaa vahinkoa %d HP!\n", damage);
+  printf("%s HP: %d", defender->name, defender->hp);
+  char *luonnehdinta = describe(defender->hp, damage);
+  defender->hp -= damage;
+  printf(" -> %d - %s\n", defender->hp, luonnehdinta);
+  return find_attack(attacker->attack_style)->damage;
 }
 
 // commandline
@@ -387,6 +404,11 @@ int main(void) {
           printf("Valitse joku seuraavista:\nA <nimi> <HP>\tlisää taistelijan\nL\t\tlistaa taistelijat\n");
           printf("D <nimi>\tpoistaa taistelijan\nD -A\t\tpoistaa kaikki taistelijat\nH\t\tnäyttää (tämän) aputiedon\n?\t\tnäyttää (tämän) aputiedon\nQ\t\tlopettaa\n");
         break;
+      case 'F':
+        if(cline.correct == 3) {
+          printf("Vahinkoa syntyy %d\n", attack(find_fighter(cline.supplement_1), find_fighter(replace_newlines(cline.supplement_2))));
+        }
+        break;
       case 'L':
         printf("Tulostetaan taistelijat:\n");
         print_all_fighters();
@@ -414,7 +436,8 @@ int main(void) {
       printf("Virhe: komento ei ollut järkevän kokoinen (1-3 osaa).\n");
     }
   }
+  
+  free_all_attacks();
   free_all_fighters();
   return 0;
 }
- 
