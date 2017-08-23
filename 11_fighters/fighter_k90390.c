@@ -495,7 +495,9 @@ int main(void) {
         print_all_fighters();
         break;
       case 'D':
-        strcpy(cline.supplement_1, replace_newlines(cline.supplement_1));
+        char newlines_cleaned[80];
+        strcpy(newlines_cleaned, replace_newlines(cline.supplement_1));
+        strcpy(cline.supplement_1, newlines_cleaned);
         if(DEBUG) printf("Annetaan poista-parametrina: '%s'\n", cline.supplement_1);
         if(cline.supplement_1[0] == '-' && toupper(cline.supplement_1[1]) == 'A') {
           free_all_fighters();
