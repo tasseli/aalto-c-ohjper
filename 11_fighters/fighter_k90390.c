@@ -99,8 +99,11 @@ int remove_fighter(char *name){
   while(current->next != NULL) {  // If there's one more item in linked list(, first look at this one)
     if(!strcmp(current->name, name)) {
       success = 1;
-      if(previous == NULL) { first = current->next; free(current); }  // Special case, special indentation. Found match and it was the first item in list.
-      else {  // Found a match
+      if(previous == NULL) {  // Found match and it was the first item in list.
+        first = current->next;
+        free(current);
+        return success;
+      } else {  // Found a match
         previous->next = current->next;
         free(current);
         return success;
@@ -112,8 +115,10 @@ int remove_fighter(char *name){
   }  // As for the last item
   if(!strcmp(current->name, name)) {  // Found a match
     success = 1;
-    if(previous == NULL) { first = current->next; free(current); }  // Found match and it was the only item in list.
-    else {  // Name to be removed matched
+    if(previous == NULL) {  // Found match and it was the only item in list.
+      first = current->next;
+      free(current);
+    } else {  // Name to be removed matched
       if(previous != NULL) previous->next = current->next;
       free(current);
     }
