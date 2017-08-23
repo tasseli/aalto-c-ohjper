@@ -429,14 +429,9 @@ struct commandline tokenize(char *merkkijono) {
   
   if(token_count < 1 || token_count > 3) {
     cline.correct = 0;
-    printf("Virhe: komento ei ollut järkevän kokoinen (1-3 osaa).\n");
+    printf("Virhe: komento ei ollut järkevän kokoinen. Syötä komento ja mahdolliset parametrit.\nSyötä pelkkä 'H' saadaksesi ohjeen.\n");
     return cline;
   }
-  /*
-  cline.command = (char)toupper(merkkijono[0]);
-  strcpy(cline.supplement_1, tokens[1]);
-  strcpy(cline.supplement_2, tokens[2]);
-  cline.correct = 1;  // Wait, what? Am I not doing these with control just a bit up from this?*/
   return cline;
 }
 
