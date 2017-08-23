@@ -6,6 +6,9 @@
 
 // Mikael Nenonen k90390
 // 2017-08-17 16:00 - time begun.
+// Decided to use an arbitrary feeling size for names of 80.
+// On the assignment hand-out lecture we were given demo code where command line size was specified as 160 characters.
+// As two names are given during attack, 80 should be enough for everybody then. 
 
 int DEBUG = 0;
 
