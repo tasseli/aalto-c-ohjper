@@ -454,113 +454,113 @@ int main(void) {
     fgets(merkkijono, sizeof(merkkijono), stdin);
     cline = tokenize(merkkijono);
     
-    if(cline.correct >= 1 && cline.correct <= 3) {
-      switch(cline.command) {
-      case 'A':
-        if(cline.correct == 3) {
-          FIGHTER *fpoint;
-          fpoint = new_fighter(cline.supplement_1, "Headbutt", atoi(cline.supplement_2));
-          printf("Tulostetaan taistelija:\n");
-          print_fighter(*fpoint);
-        } else {
-          printf("Virhe: komennon 'A' kanssa oltava tasan kaksi parametria: nimi ja HP:t.\nA <nimi> <HP>\n");
-        }
-        break;
-      case 'B':
-        if(cline.correct == 3) {
-          if(assign_attack(cline.supplement_1, replace_newlines(cline.supplement_2))) {
-            printf("Hyökkäystapa päivitetty.\n");
-            printf("Tulostetaan taistelija:\n");
-            print_fighter(*find_fighter(cline.supplement_1));
-          } else
-            printf("Hyökkäystavan päivitys ei onnistunut!\nTarkista taistelijan / hyökkäyksen nimi.\n");
-        } else if (cline.correct == 1) {
-          printf("Tulostetaan kaikki hyökkäykset:\n");
-          print_all_attacks();
-        } else {
-          printf("Virhe: komennon 'B' kanssa oltava tasan 0 tai 2 parametria: nimi ja vahinko.\nB\nB <nimi> <vahinko>\n");
-        }
-        break;
-      case 'H':
-      case '?':
-          printf("Valitse joku seuraavista:\t(<n> = nimi)\nA <nimi> <HP>\tlisää taistelijan\nL\t\tlistaa taistelijat\nD <nimi>\tpoistaa taistelijan\nD -A\t\tpoistaa kaikki taistelijat\n");
-          printf("B\t\tlistaa hyökkäystyylit\nB <n> <tyyli>\tvaihtaa taistelijalle uuden hyökkäystyylin\nF <n_1> <n_2>\ttaistelija_1 hyökkää kohteenaan taistelija_2\n");
-          printf("H\t\tnäyttää (tämän) aputiedon\n?\t\tnäyttää (tämän) aputiedon\nW\t\tkirjoittaa pelaajien tilan oletustiedostoon\nW <tiedosto>\tkirjoittaa tilan annetulla nimellä\nQ\t\tlopettaa\n");
-        break;
-      case 'F':
-        if(cline.correct == 3) {
-          attack(find_fighter(cline.supplement_1), find_fighter(replace_newlines(cline.supplement_2)));
-        } else
-          printf("Virhe: komennon F kanssa oltava tasan kaksi parametria: hyökkäävän ja puolustavan taistelijan nimet.\nF <nimi_hyökkääjän> <nimi_puolustajan>\n");
-        break;
-      case 'L':
-        printf("Tulostetaan taistelijat:\n");
-        print_all_fighters();
-        break;
-      case 'D':
-        if(cline.correct == 2) {
-          char newlines_cleaned[80];
-          strcpy(newlines_cleaned, replace_newlines(cline.supplement_1));
-          strcpy(cline.supplement_1, newlines_cleaned);
-          if(DEBUG) printf("Annetaan poista-parametrina: '%s'\n", cline.supplement_1);
-          if(cline.supplement_1[0] == '-' && toupper(cline.supplement_1[1]) == 'A') {
-            free_all_fighters();
-            printf("Poistettu kaikki taistelijat!\n");
-          } else {
-            if(remove_fighter(cline.supplement_1))
-              printf("Taistelijan poisto onnistui.\n");
-            else
-              printf("Virhe: Taistelijan poisto epäonnistui!\n");
-          }
-        } else
-          printf("Virhe: komennon 'D' lisäksi annettava tasan yksi parametri: poistettavan nimi.\nD <nimi>\n");
-        break;
-      case 'W':
-        if(cline.correct == 2) {
-          char *filename = malloc(280*sizeof(char));
-          strcpy(filename, replace_newlines(cline.supplement_1));
-          FILE *writefile;
-          writefile = fopen(filename, "w");
-          if(writefile) write_all_fighters(writefile);
-          fclose(writefile);
-          free(filename);
-        }
-        else if(cline.correct == 1) {
-          FILE *writefile;
-          writefile = fopen("fighterlog.txt", "w");
-          if(writefile) {
-            if(DEBUG) printf("File opened\n");
-            write_all_fighters(writefile);
-          }
-          fclose(writefile);
-        } else
-          printf("Virhe: komennon 'W' kanssa annettava tasan 0 (pelkkä 'W') tai 1 parametri.\nW\nW <tiedostonimi>\n");
-        break;
-      /*case 'O':
-        if(cline.correct == 2) {
-          char *filename = malloc(280*sizeof(char));
-          strcpy(filename, replace_newlines(cline.supplement_1));
-          FILE *readfile;
-          readfile = fopen(filename, "r");
-          if(readfile) read_all_fighters(readfile);
-          fclose(readfile);
-          free(filename);
-        }
-        else if(cline.correct == 1) {
-          FILE *readfile;
-          readfile = fopen("test.txt", "r");
-          if(readfile) read_all_fighters(readfile);
-          fclose(readfile);
-        }
-        break;*/
-      case 'Q':
-        printf("\nKiitos pelistä.\n");
-        break;
-      default:
-        printf("Apua saat kirjoittamalla 'H'.\n");
+    if(!(cline.correct >= 1 && cline.correct <= 3)) {
+      printf("Virhe: komento ei ollut järkevän kokoinen.\nAnna komentokirjain ja 0-2 parametria välein erotettuina. Apua komennolla 'H'.\n");
+      continue;
+    }
+    switch(cline.command) {
+    case 'A':
+      if(cline.correct == 3) {
+        FIGHTER *fpoint;
+        fpoint = new_fighter(cline.supplement_1, "Headbutt", atoi(cline.supplement_2));
+        printf("Tulostetaan taistelija:\n");
+        print_fighter(*fpoint);
+      } else {
+        printf("Virhe: komennon 'A' kanssa oltava tasan kaksi parametria: nimi ja HP:t.\nA <nimi> <HP>\n");
       }
-    } else {
-      printf("Virhe: komento ei ollut järkevän kokoinen (1-3 osaa).\n");
+      break;
+    case 'B':
+      if(cline.correct == 3) {
+        if(assign_attack(cline.supplement_1, replace_newlines(cline.supplement_2))) {
+          printf("Hyökkäystapa päivitetty.\n");
+          printf("Tulostetaan taistelija:\n");
+          print_fighter(*find_fighter(cline.supplement_1));
+        } else
+          printf("Hyökkäystavan päivitys ei onnistunut!\nTarkista taistelijan / hyökkäyksen nimi.\n");
+      } else if (cline.correct == 1) {
+        printf("Tulostetaan kaikki hyökkäykset:\n");
+        print_all_attacks();
+      } else {
+        printf("Virhe: komennon 'B' kanssa oltava tasan 0 tai 2 parametria: nimi ja vahinko.\nB\nB <nimi> <vahinko>\n");
+      }
+      break;
+    case 'H':
+    case '?':
+        printf("Valitse joku seuraavista:\t(<n> = nimi)\nA <nimi> <HP>\tlisää taistelijan\nL\t\tlistaa taistelijat\nD <nimi>\tpoistaa taistelijan\nD -A\t\tpoistaa kaikki taistelijat\n");
+        printf("B\t\tlistaa hyökkäystyylit\nB <n> <tyyli>\tvaihtaa taistelijalle uuden hyökkäystyylin\nF <n_1> <n_2>\ttaistelija_1 hyökkää kohteenaan taistelija_2\n");
+        printf("H\t\tnäyttää (tämän) aputiedon\n?\t\tnäyttää (tämän) aputiedon\nW\t\tkirjoittaa pelaajien tilan oletustiedostoon\nW <tiedosto>\tkirjoittaa tilan annetulla nimellä\nQ\t\tlopettaa\n");
+      break;
+    case 'F':
+      if(cline.correct == 3) {
+        attack(find_fighter(cline.supplement_1), find_fighter(replace_newlines(cline.supplement_2)));
+      } else
+        printf("Virhe: komennon F kanssa oltava tasan kaksi parametria: hyökkäävän ja puolustavan taistelijan nimet.\nF <nimi_hyökkääjän> <nimi_puolustajan>\n");
+      break;
+    case 'L':
+      printf("Tulostetaan taistelijat:\n");
+      print_all_fighters();
+      break;
+    case 'D':
+      if(cline.correct == 2) {
+        char newlines_cleaned[80];
+        strcpy(newlines_cleaned, replace_newlines(cline.supplement_1));
+        strcpy(cline.supplement_1, newlines_cleaned);
+        if(DEBUG) printf("Annetaan poista-parametrina: '%s'\n", cline.supplement_1);
+        if(cline.supplement_1[0] == '-' && toupper(cline.supplement_1[1]) == 'A') {
+          free_all_fighters();
+          printf("Poistettu kaikki taistelijat!\n");
+        } else {
+          if(remove_fighter(cline.supplement_1))
+            printf("Taistelijan poisto onnistui.\n");
+          else
+            printf("Virhe: Taistelijan poisto epäonnistui!\n");
+        }
+      } else
+        printf("Virhe: komennon 'D' lisäksi annettava tasan yksi parametri: poistettavan nimi.\nD <nimi>\n");
+      break;
+    case 'W':
+      if(cline.correct == 2) {
+        char *filename = malloc(280*sizeof(char));
+        strcpy(filename, replace_newlines(cline.supplement_1));
+        FILE *writefile;
+        writefile = fopen(filename, "w");
+        if(writefile) write_all_fighters(writefile);
+        fclose(writefile);
+        free(filename);
+      }
+      else if(cline.correct == 1) {
+        FILE *writefile;
+        writefile = fopen("fighterlog.txt", "w");
+        if(writefile) {
+          if(DEBUG) printf("File opened\n");
+          write_all_fighters(writefile);
+        }
+        fclose(writefile);
+      } else
+        printf("Virhe: komennon 'W' kanssa annettava tasan 0 (pelkkä 'W') tai 1 parametri.\nW\nW <tiedostonimi>\n");
+      break;
+    /*case 'O':
+      if(cline.correct == 2) {
+        char *filename = malloc(280*sizeof(char));
+        strcpy(filename, replace_newlines(cline.supplement_1));
+        FILE *readfile;
+        readfile = fopen(filename, "r");
+        if(readfile) read_all_fighters(readfile);
+        fclose(readfile);
+        free(filename);
+      }
+      else if(cline.correct == 1) {
+        FILE *readfile;
+        readfile = fopen("test.txt", "r");
+        if(readfile) read_all_fighters(readfile);
+        fclose(readfile);
+      }
+      break;*/
+    case 'Q':
+      printf("\nKiitos pelistä.\n");
+      break;
+    default:
+      printf("Apua saat kirjoittamalla 'H'.\n");
     }
   }
   
