@@ -185,11 +185,10 @@ void write_all_fighters(FILE *file) {
   printf("Kirjoitettu.\n");
 }
 
-void read_all_fighters(FILE *file) {
-  FIGHTER current;
-  
-}
-
+/*void read_all_fighters(FILE *file) {
+  //FIGHTER current;
+}  // Reading fighters is the final part of the assignment I haven't implemented. I'm returning the assignment before it just to make sure.
+*/
 // ATTACK
 // struct and a linked list, accessible by *first_a and *last_a item.
 
@@ -282,26 +281,25 @@ void free_all_attacks() {
 }
 
 void add_my_attacks() {
-  ATTACK *apoint;
-  apoint = new_attack("Growl", 1);
-  apoint = new_attack("Dragonblade", 1);  // I want my 1 point!
-  apoint = new_attack("Shriek", 1);
-  apoint = new_attack("Bite", 2);
-  apoint = new_attack("Curse", 2);
-  apoint = new_attack("Emasculate", 2);
-  apoint = new_attack("Punch", 3);
-  apoint = new_attack("Crush", 3);
-  apoint = new_attack("Claw", 3);
-  apoint = new_attack("Headbutt", 4);
-  apoint = new_attack("Kick", 5);
-  apoint = new_attack("Stomp", 8);
-  apoint = new_attack("Fireblow", 9);
-  apoint = new_attack("Firepunch", 10);
-  apoint = new_attack("Powerthrow", 12);
-  apoint = new_attack("Defenestrate", 15);
-  //apoint = new_attack("Decimate", n/10);  // Planning to implement. Not high priority.
-  apoint = new_attack("Deorbit", 35);
-  apoint = new_attack("Decapitate", 55);
+  new_attack("Growl", 1);
+  new_attack("Dragonblade", 1);  // I want my 1 point!
+  new_attack("Shriek", 1);
+  new_attack("Bite", 2);
+  new_attack("Curse", 2);
+  new_attack("Emasculate", 2);
+  new_attack("Punch", 3);
+  new_attack("Crush", 3);
+  new_attack("Claw", 3);
+  new_attack("Headbutt", 4);
+  new_attack("Kick", 5);
+  new_attack("Stomp", 8);
+  new_attack("Fireblow", 9);
+  new_attack("Firepunch", 10);
+  new_attack("Powerthrow", 12);
+  new_attack("Defenestrate", 15);
+  // new_attack("Decimate", n/10);  // Planning to implement. Not high priority.
+  new_attack("Deorbit", 35);
+  new_attack("Decapitate", 55);
 }
 
 ATTACK *find_attack(char *name) {
@@ -529,7 +527,7 @@ int main(void) {
           fclose(writefile);
         }
         break;
-      case 'O':
+      /*case 'O':
         if(cline.correct == 2) {
           char *filename = malloc(280*sizeof(char));
           strcpy(filename, replace_newlines(cline.supplement_1));
@@ -545,7 +543,7 @@ int main(void) {
           if(readfile) read_all_fighters(readfile);
           fclose(readfile);
         }
-        break;
+        break;*/
       case 'Q':
         printf("\nKiitos pelistä.\n");
         break;
