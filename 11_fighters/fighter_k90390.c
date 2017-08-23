@@ -360,6 +360,8 @@ char *describe(int hp, int damage) {
 }
 
 int attack(FIGHTER *attacker, FIGHTER *defender) {
+  if(attacker == NULL || defender == NULL)
+    return -1;
   printf("%s on vuosien saatossa hionut huippuunsa salatun taitonsa: %s.\n", attacker->name, attacker->attack_style);
   printf("Hän hyökkää, kohteenaan %s!\n", defender->name);
   int damage = find_attack(attacker->attack_style)->damage;
@@ -491,10 +493,12 @@ int main(void) {
         printf("H\t\tnäyttää (tämän) aputiedon\n?\t\tnäyttää (tämän) aputiedon\nW\t\tkirjoittaa pelaajien tilan oletustiedostoon\nW <tiedosto>\tkirjoittaa tilan annetulla nimellä\nQ\t\tlopettaa\n");
       break;
     case 'F':
-      if(cline.correct == 3) {
-        attack(find_fighter(cline.supplement_1), find_fighter(replace_newlines(cline.supplement_2)));
-      } else
-        printf("Virhe: komennon F kanssa oltava tasan kaksi parametria: hyökkäävän ja puolustavan taistelijan nimet.\nF <nimi_hyökkääjän> <nimi_puolustajan>\n");
+      ;
+      int damage = -1;
+      if(cline.correct == 3)
+        damage = attack(find_fighter(cline.supplement_1), find_fighter(replace_newlines(cline.supplement_2)));  // Returns -1 if can't find a fighter
+      if(damage == -1 || cline.correct != 3)
+        printf("Virhe: komennon F kanssa oltava tasan kaksi parametria:\nhyökkäävän ja puolustavan taistelijan nimet (kirjoitusasu tarkka).\nOnhan kummatkin taistelijat myös olemassa?\nF <nimi_hyökkääjän> <nimi_puolustajan>\n");
       break;
     case 'L':
       printf("Tulostetaan taistelijat:\n");
