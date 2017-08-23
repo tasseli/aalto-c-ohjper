@@ -5,7 +5,7 @@
 #include <stdarg.h>
 
 // Mikael Nenonen k90390
-// 2017-08-17 16:00
+// 2017-08-17 16:00 - time begun.
 
 int DEBUG = 0;
 
@@ -58,7 +58,7 @@ char *replace_newlines(char *string) {
 
 // FIGHTER
 // struct and a linked list, accessible by *first and *last item.
-// Also functions for creating, adding (to list), removing (18.8. under construction), printing, printing all, and freeing all fighters.
+// Also functions for creating, adding (to list), removing, printing, printing all, freeing all, and writing fighters.
 
 struct fighter{
   char name[80];
@@ -97,7 +97,7 @@ int remove_fighter(char *name){
   FIGHTER *current = first;
   FIGHTER *previous = NULL;
   while(current->next != NULL) {  // If there's one more item in linked list(, first look at this one)
-    if(!strcmp(current->name, name)) {  // I wonder if strcmp works like I want it to
+    if(!strcmp(current->name, name)) {
       success = 1;
       if(previous == NULL) { first = current->next; free(current); }  // Special case, special indentation. Found match and it was the first item in list.
       else {  // Found a match
@@ -192,7 +192,7 @@ void read_all_fighters(FILE *file) {
 }
 
 // ATTACK
-// struct and a linked list, accessible by *first and *last item.
+// struct and a linked list, accessible by *first_a and *last_a item.
 
 struct attack{
   char name[80];
@@ -300,7 +300,7 @@ void add_my_attacks() {
   apoint = new_attack("Firepunch", 10);
   apoint = new_attack("Powerthrow", 12);
   apoint = new_attack("Defenestrate", 15);
-  //apoint = new_attack("Decimate", n/10);
+  //apoint = new_attack("Decimate", n/10);  // Planning to implement. Not high priority.
   apoint = new_attack("Deorbit", 35);
   apoint = new_attack("Decapitate", 55);
 }
@@ -390,7 +390,7 @@ char *tok(char *str, const char *delim, int *read) {
     countedstr++;
   }
   if(DEBUG) printf("Luettu %d merkkiä onnistuneesti (sis. aiemmat välit) %s\n", *read, countedstr_cpy);
-  (*read)++;  // for the token separator. Assuming there's only one.
+  (*read)++;  // for the token separator. Assuming there's only one! Don't give me any excess whitespaces.
   return countedstr_cpy;
 }
 
