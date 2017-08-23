@@ -122,8 +122,7 @@ int remove_fighter(char *name){
 }
 
 void print_fighter(FIGHTER f) {
-  if(DEBUG) printf("Nimi: \t\t'%s'\nHyökkäys: \t%s\nHP: \t\t%d\n", f.name, f.attack_style, f.hp);
-  else printf("Nimi: \t\t%s\nHyökkäys: \t%s\nHP: \t\t%d\n", f.name, f.attack_style, f.hp);
+  printf("Nimi: \t\t%s\nHyökkäys: \t%s\nHP: \t\t%d\n", f.name, f.attack_style, f.hp);
 }
 
 void print_all_fighters() {
