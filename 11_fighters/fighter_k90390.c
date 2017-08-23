@@ -495,6 +495,7 @@ int main(void) {
         print_all_fighters();
         break;
       case 'D':
+        ;
         char newlines_cleaned[80];
         strcpy(newlines_cleaned, replace_newlines(cline.supplement_1));
         strcpy(cline.supplement_1, newlines_cleaned);
