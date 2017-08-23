@@ -427,11 +427,11 @@ struct commandline tokenize(char *merkkijono) {
     printf("Virhe: komento ei ollut järkevän kokoinen (1-3 osaa).\n");
     return cline;
   }
-  
+  /*
   cline.command = (char)toupper(merkkijono[0]);
   strcpy(cline.supplement_1, tokens[1]);
   strcpy(cline.supplement_2, tokens[2]);
-  cline.correct = 1;
+  cline.correct = 1;  // Wait, what? Am I not doing these with control just a bit up from this?*/
   return cline;
 }
 
@@ -460,7 +460,7 @@ int main(void) {
           printf("Tulostetaan taistelija:\n");
           print_fighter(*fpoint);
         } else {
-          printf("(A)dding tarvitsee kolme osaa; komennon A, nimen, ja HP:t.\n");
+          printf("Virhe: komennon 'A' kanssa oltava tasan kaksi parametria: nimi ja HP:t.\nA <nimi> <HP>\n");
         }
         break;
       case 'B':
@@ -474,9 +474,8 @@ int main(void) {
         } else if (cline.correct == 1) {
           printf("Tulostetaan kaikki hyökkäykset:\n");
           print_all_attacks();
-        }
-        else {
-          printf("(B) tarvitsee tasan yhden tai kolme osaa; komennon B, nimen, ja damagen.\n");
+        } else {
+          printf("Virhe: komennon 'B' kanssa oltava tasan 0 tai 2 parametria: nimi ja vahinko.\nB\nB <nimi> <vahinko>\n");
         }
         break;
       case 'H':
@@ -488,27 +487,30 @@ int main(void) {
       case 'F':
         if(cline.correct == 3) {
           attack(find_fighter(cline.supplement_1), find_fighter(replace_newlines(cline.supplement_2)));
-        }
+        } else
+          printf("Virhe: komennon F kanssa oltava tasan kaksi parametria: hyökkäävän ja puolustavan taistelijan nimet.\nF <nimi_hyökkääjän> <nimi_puolustajan>\n");
         break;
       case 'L':
         printf("Tulostetaan taistelijat:\n");
         print_all_fighters();
         break;
       case 'D':
-        ;
-        char newlines_cleaned[80];
-        strcpy(newlines_cleaned, replace_newlines(cline.supplement_1));
-        strcpy(cline.supplement_1, newlines_cleaned);
-        if(DEBUG) printf("Annetaan poista-parametrina: '%s'\n", cline.supplement_1);
-        if(cline.supplement_1[0] == '-' && toupper(cline.supplement_1[1]) == 'A') {
-          free_all_fighters();
-          printf("Poistettu kaikki taistelijat!\n");
-        } else {
-          if(remove_fighter(cline.supplement_1))
-            printf("Taistelijan poisto onnistui.\n");
-          else
-            printf("Virhe: Taistelijan poisto epäonnistui!\n");
-        }
+        if(cline.correct == 2) {
+          char newlines_cleaned[80];
+          strcpy(newlines_cleaned, replace_newlines(cline.supplement_1));
+          strcpy(cline.supplement_1, newlines_cleaned);
+          if(DEBUG) printf("Annetaan poista-parametrina: '%s'\n", cline.supplement_1);
+          if(cline.supplement_1[0] == '-' && toupper(cline.supplement_1[1]) == 'A') {
+            free_all_fighters();
+            printf("Poistettu kaikki taistelijat!\n");
+          } else {
+            if(remove_fighter(cline.supplement_1))
+              printf("Taistelijan poisto onnistui.\n");
+            else
+              printf("Virhe: Taistelijan poisto epäonnistui!\n");
+          }
+        } else
+          printf("Virhe: komennon 'D' lisäksi annettava tasan yksi parametri: poistettavan nimi.\nD <nimi>\n");
         break;
       case 'W':
         if(cline.correct == 2) {
@@ -528,7 +530,8 @@ int main(void) {
             write_all_fighters(writefile);
           }
           fclose(writefile);
-        }
+        } else
+          printf("Virhe: komennon 'W' kanssa annettava tasan 0 (pelkkä 'W') tai 1 parametri.\nW\nW <tiedostonimi>\n");
         break;
       /*case 'O':
         if(cline.correct == 2) {
