@@ -165,7 +165,8 @@ FIGHTER *find_fighter(char *name) {
 
 int write_fighter(FIGHTER *f, FILE *file) {
   char hp[80];
-  char *result = join_strs(7, "  [ ", f->name, " , ", f->attack_style, " , ", sprintf(hp, "%d",f->hp), " ]\n");
+  sprintf(hp, "%d",f->hp);
+  char *result = join_strs(7, "  [ ", f->name, " , ", f->attack_style, " , ", hp, " ]\n");
   fprintf(file, "%s", result);
   free(result);
   return 1;
@@ -521,7 +522,10 @@ int main(void) {
         else if(cline.correct == 1) {
           FILE *writefile;
           writefile = fopen("test.txt", "w+");
-          if(writefile) write_all_fighters(writefile);
+          if(writefile) {
+            if(DEBUG) printf("File opened\n");
+            write_all_fighters(writefile);
+          }
           fclose(writefile);
         }
         break;
