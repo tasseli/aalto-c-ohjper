@@ -10,7 +10,7 @@
 // On the assignment hand-out lecture we were given demo code where command line size was specified as 160 characters.
 // As two names are given during attack, 80 should be enough for everybody then. 
 
-int DEBUG = 0;
+int DEBUG = 1;
 
 #define FIGHTER struct fighter
 #define ATTACK struct attack
@@ -84,6 +84,7 @@ int add_fighter(FIGHTER *added, FIGHTER *member) {
 
 FIGHTER *new_fighter(char *name, char *a_style, int hp) {
   FIGHTER *uus = malloc(sizeof(FIGHTER));
+  if(DEBUG) printf("Made a new fighter!\n");
   strcpy(uus->name, name);
   strcpy(uus->attack_style, a_style);
   uus->hp = hp;
@@ -145,6 +146,8 @@ void print_all_fighters() {
 }
 
 void free_all_fighters() {
+  if(DEBUG) printf("Vapautetaan kaikkia taistelijoita...\n");
+  if(DEBUG) fflush(stdout);
   FIGHTER *current = first;
   FIGHTER *freed;
   if(current) {
@@ -156,6 +159,8 @@ void free_all_fighters() {
     free(current);
   }
   first = last = NULL;
+  if(DEBUG) printf("Vapautettu!\n");
+  if(DEBUG) fflush(stdout);
 }
 
 FIGHTER *find_fighter(char *name) {
@@ -193,10 +198,94 @@ void write_all_fighters(FILE *file) {
   printf("Kirjoitettu.\n");
 }
 
-/*void read_all_fighters(FILE *file) {
-  //FIGHTER current;
+void ack() {
+  printf("read char!\n");
+  fflush(stdout);
+}
+
+void ackm(char *message) {
+  printf("%s\n", message);
+  fflush(stdout);
+}
+
+void ackc(char letter) {
+  char byhand[2];
+  byhand[0] = letter;
+  printf("char ascii: %d\n", letter);
+  byhand[1] = '\0';
+  ackm(byhand);
+}
+
+void read_all_fighters(FILE *file) {
+  free_all_fighters();
+  int i, k=0, char_read=1;
+  ackm("Going in!");
+  for(i=0; i<strlen("fighters:[")+2 && char_read != EOF; i++) {
+    char_read = fgetc(file);
+    ackm("reading the beginning!");
+    ackc(char_read);
+  }
+  while(!(char_read == EOF)) {
+    while(!(char_read == EOF)) { // riviä kohden
+      int j;
+      FIGHTER current;
+      char string[80];
+      for(j = 0; j<strlen("  [ ") && char_read != EOF; j++) {
+        char_read = fgetc(file);
+        if(char_read == ']') {
+          char_read = fgetc(file);
+          break;
+        }
+        ackm("reading 'whitespace'");
+        ackc(char_read);
+      }
+      for(j = 0; char_read != ',' && char_read != EOF; j++) {
+        string[j] = char_read = fgetc(file);
+        ackm("reading name");
+        ackc(char_read);
+      }
+      if(char_read = ',') {
+        string[j-1] = '\0';
+        string[j] = '\0';
+      }
+      printf("%s\n", string);
+      strcpy(current.name, string);
+      char_read = fgetc(file);
+      if(char_read == EOF)
+        break;
+      for(j = 0; char_read != ',' && char_read != EOF && char_read != '\n'; j++) {
+        string[j] = char_read = fgetc(file);
+        ackm("reading style");
+        ackc(char_read);
+      }
+      if(char_read = ',') {
+        string[j-1] = '\0';
+        string[j] = '\0';
+      }
+      strcpy(current.attack_style, string);
+      for(j = 0; char_read != ']' && char_read != EOF && char_read != '\n'; j++) {
+        string[j] = char_read = fgetc(file);
+        ackm("reading hp");
+        ackc(char_read);
+      }
+      char_read = fgetc(file);
+      if(char_read == EOF)
+        break;
+      if(char_read = ']')
+        string[j-i] = '\0';
+      current.hp = strtol(string, NULL, 10);
+      new_fighter(current.name, current.attack_style, current.hp);
+      if(char_read == '\n')
+        break;
+    }
+    k++;
+    if(k>100000) {
+      printf("Virhe: looppi rikki varmaan, 100k+ merkkiä luettu jo.\n");
+      break;
+    }
+  }
 }  // Reading fighters is the final part of the assignment I haven't implemented. I'm returning the assignment before it just to make sure.
-*/
+
 // ATTACK
 // struct and a linked list, accessible by *first_a and *last_a item.
 
@@ -500,7 +589,7 @@ int main(void) {
       if(cline.correct == 3)
         damage = attack(find_fighter(cline.supplement_1), find_fighter(replace_newlines(cline.supplement_2)));  // Returns -1 if can't find a fighter...
       if(cline.correct != 3)
-        printf("Virhe: komennon F kanssa oltava tasan kaksi parametria:\nhyökkäävän ja puolustavan taistelijan nimet (kirjoitusasu tarkka).\nF <nimi_hyökkääjän> <nimi_puolustajan>\n")
+        printf("Virhe: komennon F kanssa oltava tasan kaksi parametria:\nhyökkäävän ja puolustavan taistelijan nimet (kirjoitusasu tarkka).\nF <nimi_hyökkääjän> <nimi_puolustajan>\n");
       if(damage == -1)  // ... which is used here
         printf("Virhe: toista taistelijoista ei löydy! Tarkasta taistelijoiden nimien kirjoitusasu.\n");
       break;
@@ -547,23 +636,40 @@ int main(void) {
       } else
         printf("Virhe: komennon 'W' kanssa annettava tasan 0 (pelkkä 'W') tai 1 parametri.\nW\nW <tiedostonimi>\n");
       break;
-    /*case 'O':
+    case 'O':
+      if(cline.correct != 2 && cline.correct != 1)
+        printf("Virhe: komennon 'O' kanssa annettava tasan 0 tai 1 parametria: tiedoston nimi.\nO <nimi>\n");
       if(cline.correct == 2) {
         char *filename = malloc(280*sizeof(char));
         strcpy(filename, replace_newlines(cline.supplement_1));
         FILE *readfile;
         readfile = fopen(filename, "r");
-        if(readfile) read_all_fighters(readfile);
+        printf("%d\n", readfile);
+        printf("%d\n", errno);
+        fflush(stdout);
+        if(readfile) {
+          printf("Sain pyynnön lukea tiedosto.\n");
+          fflush(stdout);
+          read_all_fighters(readfile);
+        }
+        else
+          printf("Virhe: tiedoston avaaminen ei onnistunut!\n");
         fclose(readfile);
         free(filename);
       }
       else if(cline.correct == 1) {
         FILE *readfile;
-        readfile = fopen("test.txt", "r");
-        if(readfile) read_all_fighters(readfile);
+        readfile = fopen("fighterlog.txt", "r");
+        printf("%d\n", readfile);
+        printf("%d\n", errno);
+        fflush(stdout);
+        if(readfile)
+          read_all_fighters(readfile);
+        else
+          printf("Virhe: tiedoston avaaminen ei onnistunut!\n");
         fclose(readfile);
       }
-      break;*/
+      break;
     case 'Q':
       printf("\nKiitos pelistä.\n");
       break;
