@@ -497,8 +497,10 @@ int main(void) {
       int damage = -1;
       if(cline.correct == 3)
         damage = attack(find_fighter(cline.supplement_1), find_fighter(replace_newlines(cline.supplement_2)));  // Returns -1 if can't find a fighter
-      if(damage == -1 || cline.correct != 3)
-        printf("Virhe: komennon F kanssa oltava tasan kaksi parametria:\nhyökkäävän ja puolustavan taistelijan nimet (kirjoitusasu tarkka).\nOnhan kummatkin taistelijat myös olemassa?\nF <nimi_hyökkääjän> <nimi_puolustajan>\n");
+      if(cline.correct != 3)
+        printf("Virhe: komennon F kanssa oltava tasan kaksi parametria:\nhyökkäävän ja puolustavan taistelijan nimet (kirjoitusasu tarkka).\nF <nimi_hyökkääjän> <nimi_puolustajan>\n")
+      if(damage == -1)
+        printf("Virhe: toista taistelijoista ei löydy! Tarkasta taistelijoiden nimien kirjoitusasu.\n");
       break;
     case 'L':
       printf("Tulostetaan taistelijat:\n");
