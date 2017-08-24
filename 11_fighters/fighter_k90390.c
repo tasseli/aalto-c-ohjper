@@ -81,6 +81,21 @@ int add_fighter(FIGHTER *added, FIGHTER *member) {
   return 1;
 }
 
+void print_fighter(FIGHTER f) {
+  printf("Nimi: \t\t%s\nHyökkäys: \t%s\nHP: \t\t%d\n", f.name, f.attack_style, f.hp);
+}
+
+void print_all_fighters() {
+  FIGHTER *current = first;
+  if(current) {
+    while(current->next) {
+      print_fighter(*current);
+      current = current->next;
+    }
+    print_fighter(*current);
+  }
+}
+
 FIGHTER *new_fighter(char *name, char *a_style, int hp) {
   FIGHTER *uus = malloc(sizeof(FIGHTER));
   if(DEBUG) printf("Made a new fighter!\n");
@@ -92,6 +107,7 @@ FIGHTER *new_fighter(char *name, char *a_style, int hp) {
     first = last = uus;
   else
     add_fighter(uus, first);
+  print_fighter(*uus);
   return uus;
 }
 
@@ -129,21 +145,6 @@ int remove_fighter(char *name){
   return success;
 }
 
-void print_fighter(FIGHTER f) {
-  printf("Nimi: \t\t%s\nHyökkäys: \t%s\nHP: \t\t%d\n", f.name, f.attack_style, f.hp);
-}
-
-void print_all_fighters() {
-  FIGHTER *current = first;
-  if(current) {
-    while(current->next) {
-      print_fighter(*current);
-      current = current->next;
-    }
-    print_fighter(*current);
-  }
-}
-
 void free_all_fighters() {
   if(DEBUG) printf("Vapautetaan kaikki taistelijat.\n");
   FIGHTER *current = first;
@@ -163,11 +164,12 @@ FIGHTER *find_fighter(char *name) {
   if(name) {
     FIGHTER *current = first;
     while(current) {
-      if(!strcmp(current->name, name))
+      if(!strcmp(replace_newlines(current->name), replace_newlines(name)))
         return current;
       current = current->next;
     }
   }
+  printf("Virhe: taistelijaa ei löytynyt.\n");
   return NULL;
 }
 
@@ -219,7 +221,7 @@ void read_all_fighters(FILE *file) {
         string[j-1] = '\0';
         string[j] = '\0';
       }
-      strcpy(current.name, string);
+      strcpy(current.name, replace_newlines(string));
       char_read = fgetc(file);
       if(char_read == EOF)
         break;
@@ -230,7 +232,7 @@ void read_all_fighters(FILE *file) {
         string[j-1] = '\0';
         string[j] = '\0';
       }
-      strcpy(current.attack_style, string);
+      strcpy(current.attack_style, replace_newlines(string));
       for(j = 0; char_read != ']' && char_read != EOF && char_read != '\n'; j++) {
         string[j] = char_read = fgetc(file);
       }
@@ -400,12 +402,20 @@ void write_all_attacks(FILE *file) {  // Unused in main-loop, so far.
   fprintf(file, "]\n");
 }
 
+void ack(char *msg) {
+  printf("%s\n", msg);
+  fflush(stdout);
+}
+
 int assign_attack(char *name_fighter, char *name_attack) {
   if(find_attack(name_attack)) {
     FIGHTER *current = find_fighter(name_fighter);
-    strcpy(current->attack_style, name_attack);
-    return 1;
+    if(current) {
+      strcpy(current->attack_style, name_attack);
+      return 1;
+    }
   }
+  printf("Virhe: taistelija tai hyökkäys ei täsmännyt tunnettuihin.\n");
   return 0;
 }
 
