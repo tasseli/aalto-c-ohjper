@@ -540,7 +540,7 @@ int main(void) {
   struct commandline cline;
   cline.command = 'H';
   while(cline.command != 'Q') {
-    printf("\nAnna komento (ABDFHLWQ?)\n> ");
+    printf("\nAnna komento (ABDFHLWOQ?)\n> ");
     fflush(stdout);
     fgets(merkkijono, sizeof(merkkijono), stdin);
     cline = tokenize(merkkijono);
@@ -581,7 +581,8 @@ int main(void) {
     case '?':
         printf("Valitse joku seuraavista:\t(<n> = nimi)\nA <nimi> <HP>\tlisää taistelijan\nL\t\tlistaa taistelijat\nD <nimi>\tpoistaa taistelijan\nD -A\t\tpoistaa kaikki taistelijat\n");
         printf("B\t\tlistaa hyökkäystyylit\nB <n> <tyyli>\tvaihtaa taistelijalle uuden hyökkäystyylin\nF <n_1> <n_2>\ttaistelija_1 hyökkää kohteenaan taistelija_2\n");
-        printf("H\t\tnäyttää (tämän) aputiedon\n?\t\tnäyttää (tämän) aputiedon\nW\t\tkirjoittaa pelaajien tilan oletustiedostoon\nW <tiedosto>\tkirjoittaa tilan annetulla nimellä\nQ\t\tlopettaa\n");
+        printf("H\t\tnäyttää (tämän) aputiedon\n?\t\tnäyttää (tämän) aputiedon\nW\t\tkirjoittaa pelaajien tilan oletustiedostoon\nW <tiedosto>\tkirjoittaa tilan annetulla nimellä\n");
+        printf("O\t\tlukee oletustiedoston fighterlog.txt jos saatavilla\nO <tiedosto>\tlukee tiedoston annetulla nimellä\nQ\t\tlopettaa\n");
       break;
     case 'F':
       ;
