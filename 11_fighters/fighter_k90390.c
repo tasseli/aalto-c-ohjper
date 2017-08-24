@@ -10,7 +10,7 @@
 // On the assignment hand-out lecture we were given demo code where command line size was specified as 160 characters.
 // As two names are given during attack, 80 should be enough for everybody then. 
 
-int DEBUG = 1;
+int DEBUG = 0;
 
 #define FIGHTER struct fighter
 #define ATTACK struct attack
@@ -146,7 +146,7 @@ void print_all_fighters() {
 }
 
 void free_all_fighters() {
-  if(DEBUG) printf("Vapautetaan kaikkia taistelijoita...\n");
+  if(DEBUG) printf("Vapautetaan kaikki taistelijat.\n");
   if(DEBUG) fflush(stdout);
   FIGHTER *current = first;
   FIGHTER *freed;
@@ -219,11 +219,11 @@ void ackc(char letter) {
 void read_all_fighters(FILE *file) {
   free_all_fighters();
   int i, k=0, char_read=1;
-  ackm("Going in!");
+  if(DEBUG) ackm("Going in!");
   for(i=0; i<strlen("fighters:[")+2 && char_read != EOF; i++) {
     char_read = fgetc(file);
-    ackm("reading the beginning!");
-    ackc(char_read);
+    if(DEBUG) ackm("reading the beginning!");
+    if(DEBUG) ackc(char_read);
   }
   while(!(char_read == EOF)) {
     while(!(char_read == EOF)) { // riviä kohden
@@ -236,27 +236,27 @@ void read_all_fighters(FILE *file) {
           char_read = fgetc(file);
           break;
         }
-        ackm("reading 'whitespace'");
-        ackc(char_read);
+        if(DEBUG) ackm("reading 'whitespace'");
+        if(DEBUG) ackc(char_read);
       }
       for(j = 0; char_read != ',' && char_read != EOF; j++) {
         string[j] = char_read = fgetc(file);
-        ackm("reading name");
-        ackc(char_read);
+        if(DEBUG) ackm("reading name");
+        if(DEBUG) ackc(char_read);
       }
       if(char_read = ',') {
         string[j-1] = '\0';
         string[j] = '\0';
       }
-      printf("%s\n", string);
+      if(DEBUG) printf("%s\n", string);
       strcpy(current.name, string);
       char_read = fgetc(file);
       if(char_read == EOF)
         break;
       for(j = 0; char_read != ',' && char_read != EOF && char_read != '\n'; j++) {
         string[j] = char_read = fgetc(file);
-        ackm("reading style");
-        ackc(char_read);
+        if(DEBUG) ackm("reading style");
+        if(DEBUG) ackc(char_read);
       }
       if(char_read = ',') {
         string[j-1] = '\0';
@@ -265,8 +265,8 @@ void read_all_fighters(FILE *file) {
       strcpy(current.attack_style, string);
       for(j = 0; char_read != ']' && char_read != EOF && char_read != '\n'; j++) {
         string[j] = char_read = fgetc(file);
-        ackm("reading hp");
-        ackc(char_read);
+        if(DEBUG) ackm("reading hp");
+        if(DEBUG) ackc(char_read);
       }
       char_read = fgetc(file);
       if(char_read == EOF)
@@ -535,7 +535,7 @@ int main(void) {
   add_my_attacks();
   char merkkijono[160];
   memset(merkkijono, '\0', sizeof(merkkijono));
-  printf("Tervetuloa taistelupeliin (vaiheessa)!\n");
+  printf("Tervetuloa taistelupeliin!\n");
   fflush(stdout);
   struct commandline cline;
   cline.command = 'H';
@@ -644,13 +644,14 @@ int main(void) {
         strcpy(filename, replace_newlines(cline.supplement_1));
         FILE *readfile;
         readfile = fopen(filename, "r");
-        printf("%d\n", readfile);
-        printf("%d\n", errno);
+        if(DEBUG) printf("%d\n", readfile);
+        if(DEBUG) printf("%d\n", errno);
         fflush(stdout);
         if(readfile) {
-          printf("Sain pyynnön lukea tiedosto.\n");
+          if(DEBUG) printf("Sain pyynnön lukea tiedosto.\n");
           fflush(stdout);
           read_all_fighters(readfile);
+          printf("Luettu taistelijatiedosto.\n");
         }
         else
           printf("Virhe: tiedoston avaaminen ei onnistunut!\n");
@@ -660,11 +661,13 @@ int main(void) {
       else if(cline.correct == 1) {
         FILE *readfile;
         readfile = fopen("fighterlog.txt", "r");
-        printf("%d\n", readfile);
-        printf("%d\n", errno);
+        if(DEBUG) printf("%d\n", readfile);
+        if(DEBUG) printf("%d\n", errno);
         fflush(stdout);
-        if(readfile)
+        if(readfile) {
           read_all_fighters(readfile);
+          printf("Luettu taistelijatiedosto.\n");
+        }
         else
           printf("Virhe: tiedoston avaaminen ei onnistunut!\n");
         fclose(readfile);
