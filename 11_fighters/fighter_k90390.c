@@ -25,7 +25,6 @@ char *join_strs(int count, ...) {
   int i;
   for(i=0; i<count; i++) {
     next_string = va_arg (ap, char*);
-    if(DEBUG) printf("Read next string, and it's: '%s'\n", next_string);
     if(DEBUG) printf("The string so_far is: '%s'\n", so_far);
     if(!so_far) {
       so_far = realloc(so_far, 80*sizeof(char));
@@ -147,7 +146,6 @@ void print_all_fighters() {
 
 void free_all_fighters() {
   if(DEBUG) printf("Vapautetaan kaikki taistelijat.\n");
-  if(DEBUG) fflush(stdout);
   FIGHTER *current = first;
   FIGHTER *freed;
   if(current) {
@@ -159,8 +157,6 @@ void free_all_fighters() {
     free(current);
   }
   first = last = NULL;
-  if(DEBUG) printf("Vapautettu!\n");
-  if(DEBUG) fflush(stdout);
 }
 
 FIGHTER *find_fighter(char *name) {
@@ -198,32 +194,11 @@ void write_all_fighters(FILE *file) {
   printf("Kirjoitettu.\n");
 }
 
-void ack() {
-  printf("read char!\n");
-  fflush(stdout);
-}
-
-void ackm(char *message) {
-  printf("%s\n", message);
-  fflush(stdout);
-}
-
-void ackc(char letter) {
-  char byhand[2];
-  byhand[0] = letter;
-  printf("char ascii: %d\n", letter);
-  byhand[1] = '\0';
-  ackm(byhand);
-}
-
 void read_all_fighters(FILE *file) {
   free_all_fighters();
   int i, k=0, char_read=1;
-  if(DEBUG) ackm("Going in!");
   for(i=0; i<strlen("fighters:[")+2 && char_read != EOF; i++) {
     char_read = fgetc(file);
-    if(DEBUG) ackm("reading the beginning!");
-    if(DEBUG) ackc(char_read);
   }
   while(!(char_read == EOF)) {
     while(!(char_read == EOF)) { // riviä kohden
@@ -236,27 +211,20 @@ void read_all_fighters(FILE *file) {
           char_read = fgetc(file);
           break;
         }
-        if(DEBUG) ackm("reading 'whitespace'");
-        if(DEBUG) ackc(char_read);
       }
       for(j = 0; char_read != ',' && char_read != EOF; j++) {
         string[j] = char_read = fgetc(file);
-        if(DEBUG) ackm("reading name");
-        if(DEBUG) ackc(char_read);
       }
       if(char_read = ',') {
         string[j-1] = '\0';
         string[j] = '\0';
       }
-      if(DEBUG) printf("%s\n", string);
       strcpy(current.name, string);
       char_read = fgetc(file);
       if(char_read == EOF)
         break;
       for(j = 0; char_read != ',' && char_read != EOF && char_read != '\n'; j++) {
         string[j] = char_read = fgetc(file);
-        if(DEBUG) ackm("reading style");
-        if(DEBUG) ackc(char_read);
       }
       if(char_read = ',') {
         string[j-1] = '\0';
@@ -265,8 +233,6 @@ void read_all_fighters(FILE *file) {
       strcpy(current.attack_style, string);
       for(j = 0; char_read != ']' && char_read != EOF && char_read != '\n'; j++) {
         string[j] = char_read = fgetc(file);
-        if(DEBUG) ackm("reading hp");
-        if(DEBUG) ackc(char_read);
       }
       char_read = fgetc(file);
       if(char_read == EOF)
@@ -645,12 +611,7 @@ int main(void) {
         strcpy(filename, replace_newlines(cline.supplement_1));
         FILE *readfile;
         readfile = fopen(filename, "r");
-        if(DEBUG) printf("%d\n", readfile);
-        if(DEBUG) printf("%d\n", errno);
-        fflush(stdout);
         if(readfile) {
-          if(DEBUG) printf("Sain pyynnön lukea tiedosto.\n");
-          fflush(stdout);
           read_all_fighters(readfile);
           printf("Luettu taistelijatiedosto.\n");
         }
@@ -662,9 +623,6 @@ int main(void) {
       else if(cline.correct == 1) {
         FILE *readfile;
         readfile = fopen("fighterlog.txt", "r");
-        if(DEBUG) printf("%d\n", readfile);
-        if(DEBUG) printf("%d\n", errno);
-        fflush(stdout);
         if(readfile) {
           read_all_fighters(readfile);
           printf("Luettu taistelijatiedosto.\n");
