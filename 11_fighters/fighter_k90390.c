@@ -215,7 +215,7 @@ void read_all_fighters(FILE *file) {
       for(j = 0; char_read != ',' && char_read != EOF; j++) {
         string[j] = char_read = fgetc(file);
       }
-      if(char_read = ',') {
+      if(char_read == ',') {
         string[j-1] = '\0';
         string[j] = '\0';
       }
@@ -226,7 +226,7 @@ void read_all_fighters(FILE *file) {
       for(j = 0; char_read != ',' && char_read != EOF && char_read != '\n'; j++) {
         string[j] = char_read = fgetc(file);
       }
-      if(char_read = ',') {
+      if(char_read == ',') {
         string[j-1] = '\0';
         string[j] = '\0';
       }
@@ -237,8 +237,10 @@ void read_all_fighters(FILE *file) {
       char_read = fgetc(file);
       if(char_read == EOF)
         break;
-      if(char_read = ']')
-        string[j-i] = '\0';
+      if(char_read == ']') {
+        string[j-1] = '\0';
+        string[j] = '\0';
+      }
       current.hp = strtol(string, NULL, 10);
       new_fighter(current.name, current.attack_style, current.hp);
       if(char_read == '\n')
