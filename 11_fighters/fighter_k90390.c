@@ -472,6 +472,13 @@ int main(void) {
       }
       break;
     case 'B':
+      if(cline.correct != 3 && cline.correct != 1) {
+        printf("Virhe: komennon 'B' kanssa oltava tasan 0 tai 2 parametria: nimi ja vahinko.\nB\nB <nimi> <vahinko>\n");
+      }
+      if (cline.correct == 1) {
+        printf("Tulostetaan kaikki hyökkäykset:\n");
+        print_all_attacks();
+      }
       if(cline.correct == 3) {
         if(assign_attack(cline.supplement_1, replace_newlines(cline.supplement_2))) {
           printf("Hyökkäystapa päivitetty.\n");
@@ -479,11 +486,6 @@ int main(void) {
           print_fighter(*find_fighter(cline.supplement_1));
         } else
           printf("Hyökkäystavan päivitys ei onnistunut!\nTarkista taistelijan / hyökkäyksen nimi.\n");
-      } else if (cline.correct == 1) {
-        printf("Tulostetaan kaikki hyökkäykset:\n");
-        print_all_attacks();
-      } else {
-        printf("Virhe: komennon 'B' kanssa oltava tasan 0 tai 2 parametria: nimi ja vahinko.\nB\nB <nimi> <vahinko>\n");
       }
       break;
     case 'H':
@@ -496,10 +498,10 @@ int main(void) {
       ;
       int damage = -1;
       if(cline.correct == 3)
-        damage = attack(find_fighter(cline.supplement_1), find_fighter(replace_newlines(cline.supplement_2)));  // Returns -1 if can't find a fighter
+        damage = attack(find_fighter(cline.supplement_1), find_fighter(replace_newlines(cline.supplement_2)));  // Returns -1 if can't find a fighter...
       if(cline.correct != 3)
         printf("Virhe: komennon F kanssa oltava tasan kaksi parametria:\nhyökkäävän ja puolustavan taistelijan nimet (kirjoitusasu tarkka).\nF <nimi_hyökkääjän> <nimi_puolustajan>\n")
-      if(damage == -1)
+      if(damage == -1)  // ... which is used here
         printf("Virhe: toista taistelijoista ei löydy! Tarkasta taistelijoiden nimien kirjoitusasu.\n");
       break;
     case 'L':
@@ -507,15 +509,15 @@ int main(void) {
       print_all_fighters();
       break;
     case 'D':
-      if(cline.correct == 2) {
+      if(cline.correct == 2) {  // parameter cline.supplement_1 was given
         char newlines_cleaned[80];
         strcpy(newlines_cleaned, replace_newlines(cline.supplement_1));
         strcpy(cline.supplement_1, newlines_cleaned);
         if(DEBUG) printf("Annetaan poista-parametrina: '%s'\n", cline.supplement_1);
-        if(cline.supplement_1[0] == '-' && toupper(cline.supplement_1[1]) == 'A') {
+        if(cline.supplement_1[0] == '-' && toupper(cline.supplement_1[1]) == 'A') {  // checking if sup_1 orders to delete all fighters ...
           free_all_fighters();
           printf("Poistettu kaikki taistelijat!\n");
-        } else {
+        } else {  // ... or a single one.
           if(remove_fighter(cline.supplement_1))
             printf("Taistelijan poisto onnistui.\n");
           else
